@@ -18,6 +18,7 @@ const screenRoutes = {
 
 const otherRoutes = {
     // Add routes without the app layout like documents viewers and external links
+    "https://github.com/nekutuzov/ueca-react-app.git": () => null,
     "https://www.google.com/search?:q": (p: { q?: string }) => p && null,
 }
 
@@ -29,6 +30,6 @@ type ScreenRoute = Route<ScreenRoutes>;
 
 type AppRoute = ScreenRoute | OtherRoute;
 
-type AppRouteParams<T extends AppRoute["path"]> = Extract<AppRoute, { path: T}>["params"];
+type AppRouteParams<T extends AppRoute["path"]> = Extract<AppRoute, { path: T }>["params"];
 
 export { otherRoutes, screenRoutes, OtherRoute, ScreenRoute, AppRoute, AppRouteParams }
