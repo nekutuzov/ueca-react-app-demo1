@@ -1,0 +1,224 @@
+[
+    {
+        "id": "1",
+        "createdAt": "2024-11-01T10:30:00Z",
+        "title": "Sales Performance",
+        "description": "Monthly sales data for Q4 2024",
+        "type": "line",
+        "data": [
+            {
+                "id": "jan",
+                "label": "January",
+                "value": 65000
+            },
+            {
+                "id": "feb",
+                "label": "February",
+                "value": 78000
+            },
+            {
+                "id": "mar",
+                "label": "March",
+                "value": 82000
+            },
+            {
+                "id": "apr",
+                "label": "April",
+                "value": 71000
+            }
+        ],
+        "lineChartConfig": {
+            "showTooltip": true,
+            "showLegend": true,
+            "legendDirection": "vertical",
+            "legendPosition": {
+                "vertical": "bottom",
+                "horizontal": "end"
+            },
+            "showGrid": true,
+            "xAxisLabel": "Month",
+            "yAxisLabel": "Sales ($)",
+            "xAxisType": "point",
+            "yAxisType": "linear",
+            "curve": "monotoneX",
+            "area": false,
+            "margin": {
+                "top": 50,
+                "right": 50,
+                "bottom": 80,
+                "left": 80
+            }
+        }
+    },
+    {
+        "id": "2",
+        "createdAt": "2024-11-05T14:15:00Z",
+        "title": "User Demographics",
+        "description": "Distribution of users by age group",
+        "type": "pie",
+        "data": [
+            {
+                "id": "18-25",
+                "label": "18-25",
+                "value": 120,
+                "color": "#FF6384"
+            },
+            {
+                "id": "26-35",
+                "label": "26-35",
+                "value": 240,
+                "color": "#36A2EB"
+            },
+            {
+                "id": "36-45",
+                "label": "36-45",
+                "value": 180,
+                "color": "#FFCE56"
+            },
+            {
+                "id": "46+",
+                "label": "46+",
+                "value": 95,
+                "color": "#4BC0C0"
+            }
+        ],
+        "pieChartConfig": {
+            "showLabels": true,
+            "showTooltip": true,
+            "showLegend": true,
+            "legendDirection": "vertical",
+            "legendPosition": {
+                "vertical": "bottom",
+                "horizontal": "end"
+            },
+            "innerRadius": 0,
+            "outerRadius": 120,
+            "paddingAngle": 2,
+            "cornerRadius": 5,
+            "margin": {
+                "top": 50,
+                "right": 50,
+                "bottom": 80,
+                "left": 80
+            }
+        }
+    },
+    {
+        "id": "3",
+        "createdAt": "2024-11-10T09:20:00Z",
+        "title": "Website Traffic",
+        "description": "Daily website visitors for the past week",
+        "type": "bar",
+        "data": [
+            {
+                "id": "mon",
+                "label": "Monday",
+                "value": 2340
+            },
+            {
+                "id": "tue",
+                "label": "Tuesday",
+                "value": 3120
+            },
+            {
+                "id": "wed",
+                "label": "Wednesday",
+                "value": 2890
+            },
+            {
+                "id": "thu",
+                "label": "Thursday",
+                "value": 3350
+            },
+            {
+                "id": "fri",
+                "label": "Friday",
+                "value": 4200
+            },
+            {
+                "id": "sat",
+                "label": "Saturday",
+                "value": 1800
+            },
+            {
+                "id": "sun",
+                "label": "Sunday",
+                "value": 1650
+            }
+        ],
+        "barChartConfig": {
+            "showGrid": true,
+            "showLegend": true,
+            "legendDirection": "vertical",
+            "legendPosition": {
+                "vertical": "bottom",
+                "horizontal": "end"
+            },
+            "showTooltip": true,
+            "xAxisLabel": "Day of Week",
+            "yAxisLabel": "Visitors",
+            "yAxisType": "linear",
+            "layout": "vertical",
+            "margin": {
+                "top": 50,
+                "right": 50,
+                "bottom": 80,
+                "left": 80
+            }
+        }
+    },
+    {
+        "id": "4",
+        "createdAt": "2024-11-12T11:45:00Z",
+        "title": "Marketing ROI Analysis",
+        "description": "Correlation between marketing spend and revenue",
+        "type": "scatter",
+        "data": [
+            {
+                "id": "q1",
+                "label": "Q1 Campaign",
+                "value": 150000
+            },
+            {
+                "id": "q2",
+                "label": "Q2 Campaign",
+                "value": 185000
+            },
+            {
+                "id": "q3",
+                "label": "Q3 Campaign",
+                "value": 220000
+            },
+            {
+                "id": "q4",
+                "label": "Q4 Campaign",
+                "value": 175000
+            },
+            {
+                "id": "special",
+                "label": "Special Event",
+                "value": 295000
+            }
+        ],
+        "scatterChartConfig": {
+            "showGrid": true,
+            "showLegend": true,
+            "legendDirection": "vertical",
+            "legendPosition": {
+                "vertical": "bottom",
+                "horizontal": "end"
+            },
+            "showTooltip": true,
+            "xAxisLabel": "Marketing Spend ($)",
+            "yAxisLabel": "Revenue Generated ($)",
+            "xAxisType": "linear",
+            "yAxisType": "linear",
+            "margin": {
+                "top": 50,
+                "right": 50,
+                "bottom": 80,
+                "left": 80
+            }
+        }
+    }
+]
