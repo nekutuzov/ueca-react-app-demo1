@@ -5,6 +5,7 @@
   "description": "UECA-React Application Demo",
   "author": "Aleksey Suvorov <cranesoft@protonmail.com>",
   "license": "ISC",
+  "homepage": "https://ueca-react.carrd.co/",
   "type": "module",
   "scripts": {
     "dev": "vite",
