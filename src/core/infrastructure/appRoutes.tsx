@@ -18,6 +18,7 @@ const screenRoutes = {
 
 const otherRoutes = {
     // Add routes without the app layout like documents viewers and external links
+    "https://youtu.be/SQl8f-qGxwU?si=-YTWPpPB7ExBZ6L0": () => null,
     "https://github.com/nekutuzov/ueca-react-app.git": () => null,
     "https://www.npmjs.com/package/ueca-react": () => null,
     "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/home/homeScreen.tsx": () => null,

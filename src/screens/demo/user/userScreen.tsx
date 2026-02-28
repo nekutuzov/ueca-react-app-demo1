@@ -1,11 +1,12 @@
 import * as UECA from "ueca-react";
 import {
     Block,
-    CheckboxModel, Col, RouteScreenBaseModel, RouteScreenBaseParams, RouteScreenBaseStruct, Row, TextFieldModel, useCheckbox, useRouteScreenBase, useTextField, Button
+    CheckboxModel, Col, RouteScreenBaseModel, RouteScreenBaseParams, RouteScreenBaseStruct, Row, TextFieldModel, useCheckbox, useRouteScreenBase, useTextField, Button, Markdown
 } from "@components";
 import { AppRouteParams } from "@core";
 import { CRUDScreenModel, useCRUDScreen } from "@screens";
 import { User } from "@api";
+import userExplanation from "./userExplanation.md?raw";
 
 type UserScreenStruct = RouteScreenBaseStruct<{
     props: {
@@ -62,10 +63,20 @@ function useUserScreen(params?: UserScreenParams): UserScreenModel {
                     }
                 ],
                 toolsView: () => (
-                    <Button
-                        contentView="Code"
-                        onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/user/userScreen.tsx" })}
-                    />
+                    <Row>
+                        <Button
+                            contentView="Explain"
+                            onClick={() => {
+                                model.crudScreen.screenLayout.drawerPanel.titleView = "User Editor Explanation";
+                                model.crudScreen.screenLayout.drawerPanel.contentView = <Markdown source={userExplanation} />;
+                                model.crudScreen.screenLayout.drawerPanel.open = true;
+                            }}
+                        />
+                        <Button
+                            contentView="Code"
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/user/userScreen.tsx" })}
+                        />
+                    </Row>
                 ),
                 contentView: () => model._contentView(),
                 onRefresh: () => model.doOnRefresh(),

@@ -3,10 +3,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import {
     Button, ButtonModel, CheckboxModel, Col, NavItem, RouteScreenBaseModel, RouteScreenBaseParams, RouteScreenBaseStruct, Row,
-    TableModel, TableRoute, useButton, useCheckbox, useRouteScreenBase, useTable
+    TableModel, TableRoute, useButton, useCheckbox, useRouteScreenBase, useTable, Markdown
 } from "@components";
 import { CRUDScreenModel, useCRUDScreen } from "@screens";
 import { User } from "@api";
+import userListExplanation from "./userListExplanation.md?raw";
 
 type UserListScreenStruct = RouteScreenBaseStruct<{
     props: {
@@ -43,10 +44,20 @@ function useUserListScreen(params?: UserListScreenParams): UserListScreenModel {
                     { route: { path: "/users" }, label: "Users" }
                 ],
                 toolsView: () => (
-                    <Button
-                        contentView="Code"
-                        onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/user/userListScreen.tsx" })}
-                    />
+                    <Row>
+                        <Button
+                            contentView="Explain"
+                            onClick={() => {
+                                model.crudScreen.screenLayout.drawerPanel.titleView = "User Management Explanation";
+                                model.crudScreen.screenLayout.drawerPanel.contentView = <Markdown source={userListExplanation} />;
+                                model.crudScreen.screenLayout.drawerPanel.open = true;
+                            }}
+                        />
+                        <Button
+                            contentView="Code"
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/user/userListScreen.tsx" })}
+                        />
+                    </Row>
                 ),
                 contentView: () => model.contentView(),
                 onRefresh: () => model.doOnRefresh(),

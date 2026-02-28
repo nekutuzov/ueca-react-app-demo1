@@ -4,6 +4,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AdbIcon from '@mui/icons-material/Adb';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import { Row, AppBarModel, ToolbarModel, UIBaseModel, UIBaseParams, UIBaseStruct, useAppBar, useToolbar, useUIBase, SwitchModel, useSwitch, IconButtonModel, useIconButton } from "@components";
 
 type AppTopBarStruct = UIBaseStruct<{
@@ -11,6 +12,7 @@ type AppTopBarStruct = UIBaseStruct<{
         appBar: AppBarModel;
         toolbar: ToolbarModel;
         themeToggle: SwitchModel;
+        youtubeIconButton: IconButtonModel;
         githubIconButton: IconButtonModel;
         npmIconButton: IconButtonModel;
         userIconButton: IconButtonModel;
@@ -41,6 +43,11 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
                 onChange: async () => {
                     await model.bus.unicast("App.Theme.SetMode", model.themeToggle.checked ? "dark" : "light");
                 },
+            }),
+            youtubeIconButton: useIconButton({
+                iconView: <YouTubeIcon />,
+                color: "inherit",
+                onClick: async () => await model.openNewTab({path: "https://youtu.be/SQl8f-qGxwU?si=-YTWPpPB7ExBZ6L0"})
             }),
             githubIconButton: useIconButton({
                 iconView: <GitHubIcon />,
@@ -83,6 +90,7 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
                 </Row>
                 <Row verticalAlign={"center"}>
                     <model.themeToggle.View />
+                    <model.youtubeIconButton.View />
                     <model.githubIconButton.View />
                     <model.npmIconButton.View />
                     <model.userIconButton.View />
