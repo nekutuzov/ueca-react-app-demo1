@@ -5,11 +5,12 @@ import {
     ScatterChartModel, useScatterChart, BarChartModel, useBarChart, PieChartSettingsModel, usePieChartSettings,
     LineChartSettingsModel, useLineChartSettings, ScatterChartSettingsModel, useScatterChartSettings,
     BarChartSettingsModel, useBarChartSettings,
-    Block, Button
+    Block, Button, Markdown
 } from "@components";
 import { AppRouteParams } from "@core";
 import { CRUDScreenModel, useCRUDScreen } from "@screens";
 import { Chart } from "@api";
+import chartExplanation from "./chartExplanation.md?raw";
 
 type ChartScreenStruct = RouteScreenBaseStruct<{
     props: {
@@ -70,10 +71,20 @@ function useChartScreen(params?: ChartScreenParams): ChartScreenModel {
                     }
                 ],
                 toolsView: () => (
-                    <Button
-                        contentView="Code"
-                        onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/chart/chartScreen.tsx" })}
-                    />
+                    <Row>
+                        <Button
+                            contentView="Explain"
+                            onClick={() => {
+                                model.crudScreen.screenLayout.drawerPanel.titleView = "Chart Editor Explanation";
+                                model.crudScreen.screenLayout.drawerPanel.contentView = <Markdown source={chartExplanation} />;
+                                model.crudScreen.screenLayout.drawerPanel.open = true;
+                            }}
+                        />
+                        <Button
+                            contentView="Code"
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/chart/chartScreen.tsx" })}
+                        />
+                    </Row>
                 ),
                 contentView: () => model._contentView(),
                 onRefresh: () => model.doOnRefresh(),

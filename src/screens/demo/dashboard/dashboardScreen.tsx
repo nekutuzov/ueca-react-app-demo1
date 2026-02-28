@@ -1,10 +1,11 @@
 import * as UECA from "ueca-react";
 import {
     RouteScreenBaseModel, RouteScreenBaseParams, RouteScreenBaseStruct, useRouteScreenBase, CardModel,
-    useCard, Row, PieChartModel, usePieChart, Block, Button
+    useCard, Row, PieChartModel, usePieChart, Block, Button, Markdown
 } from "@components";
 import { CRUDScreenModel, useCRUDScreen } from "@screens";
 import { User, Chart, ChartDataPoint } from "@api";
+import dashboardExplanation from "./dashboardExplanation.md?raw";
 
 type DashboardScreenStruct = RouteScreenBaseStruct<{
     props: {
@@ -88,10 +89,20 @@ function useDashboardScreen(params?: DashboardScreenParams): DashboardScreenMode
                     { route: { path: "/dashboard" }, label: "Dashboard" }
                 ],
                 toolsView: () => (
-                    <Button
-                        contentView="Code"
-                        onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/dashboard/dashboardScreen.tsx" })}
-                    />
+                    <Row>
+                        <Button
+                            contentView="Explain"
+                            onClick={() => {
+                                model.crudScreen.screenLayout.drawerPanel.titleView = "Dashboard Explanation";
+                                model.crudScreen.screenLayout.drawerPanel.contentView = <Markdown source={dashboardExplanation} />;
+                                model.crudScreen.screenLayout.drawerPanel.open = true;
+                            }}
+                        />
+                        <Button
+                            contentView="Code"
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/dashboard/dashboardScreen.tsx" })}
+                        />
+                    </Row>
                 ),
                 contentView: () => model.contentView(),
                 onRefresh: () => model.doOnRefresh(),
