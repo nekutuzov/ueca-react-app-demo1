@@ -100,7 +100,7 @@ function useDashboardScreen(params?: DashboardScreenParams): DashboardScreenMode
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/dashboard/dashboardScreen.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/demo/dashboard/dashboardScreen.tsx" })}
                         />
                     </Row>
                 ),

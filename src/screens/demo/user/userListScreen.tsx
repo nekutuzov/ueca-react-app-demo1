@@ -55,7 +55,7 @@ function useUserListScreen(params?: UserListScreenParams): UserListScreenModel {
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/demo/user/userListScreen.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/demo/user/userListScreen.tsx" })}
                         />
                     </Row>
                 ),

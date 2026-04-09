@@ -51,7 +51,7 @@ function useAppSideBar(params?: AppSideBarParams): AppSideBarModel {
             }),
 
             uecaLink: useNavLink({
-                route: { path: "https://ueca-react.carrd.co/", params: undefined },
+                route: { path: "https://cranesoft.net/", params: undefined },
                 title: "UECA React Framework",
                 underline: "none",
                 newTab: true,

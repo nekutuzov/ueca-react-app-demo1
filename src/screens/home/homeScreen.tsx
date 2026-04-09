@@ -36,7 +36,7 @@ function useHomeScreen(params?: HomeScreenParams): HomeScreenModel {
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/home/homeScreen.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/home/homeScreen.tsx" })}
                         />
                     </Row>
                 ),

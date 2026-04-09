@@ -52,7 +52,7 @@ function useMessageBusScreen(params?: MessageBusScreenParams): MessageBusScreenM
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/tutorial/messageBus/messageBusScreen.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/tutorial/messageBus/messageBusScreen.tsx" })}
                         />
                     </Row>
                 ),

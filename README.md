@@ -19,7 +19,7 @@ UECA-React replaces standard React patterns (useState, useEffect, Context) with 
 - **Property Bindings** - Unidirectional, bidirectional, and custom binding patterns
 - **Automatic Events** - Every property generates onChange events automatically
 
-## 🚀 [Live Demo](https://nekutuzov.github.io/ueca-react-app/)
+## 🚀 [Live Demo](https://nekutuzov.github.io/ueca-react-app-demo1/)
 
 Explore the live application to see all features in action!
 
@@ -72,8 +72,8 @@ Explore the live application to see all features in action!
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/nekutuzov/ueca-react-app.git
-   cd ueca-react-app
+   git clone https://github.com/nekutuzov/ueca-react-app-demo1.git
+   cd ueca-react-app-demo1
    ```
 
 2. Install dependencies:
@@ -86,7 +86,7 @@ Explore the live application to see all features in action!
    npm run dev
    ```
 
-4. Open your browser and navigate to `http://localhost:5001/myapp`
+4. Open your browser and navigate to `http://localhost:5001/ueca-react-app-demo1`
 
 ## 📜 Available Scripts
 
@@ -98,7 +98,7 @@ Explore the live application to see all features in action!
 ## 📁 Project Structure
 
 ```
-ueca-react-app/
+ueca-react-app-demo1/
 ├── public/              # Static assets
 ├── src/
 │   ├── api/            # API clients and mock handlers

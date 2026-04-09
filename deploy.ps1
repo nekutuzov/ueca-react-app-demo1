@@ -1,5 +1,5 @@
 # Deploy script - Copy build files to deployment folder
-$deployPath = "..\ueca-react-app-deploy"
+$deployPath = "..\ueca-react-app-demo1-deploy"
 
 Write-Host "Building application..." -ForegroundColor Cyan
 npm run build
@@ -35,7 +35,7 @@ Push-Location $deployPath
 $hasRemote = git remote | Select-String -Pattern "origin" -Quiet
 if (-not $hasRemote) {
     Write-Host "Adding git remote..." -ForegroundColor Yellow
-    git remote add origin https://github.com/nekutuzov/ueca-react-app.git
+    git remote add origin https://github.com/nekutuzov/ueca-react-app-demo1.git
     Write-Host "Remote added successfully!" -ForegroundColor Green
 } else {
     Write-Host "Git remote already configured." -ForegroundColor Green

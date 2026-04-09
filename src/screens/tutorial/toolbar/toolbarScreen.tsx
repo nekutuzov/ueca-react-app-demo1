@@ -52,7 +52,7 @@ function useToolbarScreen(params?: ToolbarScreenParams): ToolbarScreenModel {
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/tutorial/toolbar/toolbarScreen.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/tutorial/toolbar/toolbarScreen.tsx" })}
                         />
                     </Row>
                 ),

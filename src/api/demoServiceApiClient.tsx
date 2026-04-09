@@ -2,7 +2,7 @@ import * as UECA from "ueca-react";
 import { createRestAPIClient, IRestApiClient, User, Chart } from "@api";
 import { BaseModel, BaseStruct } from "@components";
 
-const apiBaseUrl = `${window.location.origin}/ueca-react-app/api`;
+const apiBaseUrl = `${window.location.origin}/ueca-react-app-demo1/api`;
 
 type DemoServiceApiClientStruct = BaseStruct<{
     props: {

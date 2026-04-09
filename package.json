@@ -1,11 +1,11 @@
 {
-  "name": "ueca-react-app",
+  "name": "ueca-react-app-demo1",
   "private": true,
   "version": "1.0.0",
   "description": "UECA-React Application Demo",
   "author": "Aleksey Suvorov <cranesoft@protonmail.com>",
   "license": "ISC",
-  "homepage": "https://ueca-react.carrd.co/",
+  "homepage": "https://cranesoft.net/",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -52,7 +52,7 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
             githubIconButton: useIconButton({
                 iconView: <GitHubIcon />,
                 color: "inherit",
-                onClick: async () => await model.openNewTab({path: "https://github.com/nekutuzov/ueca-react-app.git"})
+                onClick: async () => await model.openNewTab({path: "https://github.com/nekutuzov/ueca-react-app-demo1"})
             }),
             npmIconButton: useIconButton({
                 iconView: <Inventory2Icon />,

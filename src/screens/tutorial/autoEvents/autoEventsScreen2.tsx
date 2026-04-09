@@ -52,7 +52,7 @@ function useAutoEventsScreen2(params?: AutoEventsScreen2Params): AutoEventsScree
                         />
                         <Button
                             contentView="Code"
-                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app/blob/master/src/screens/tutorial/autoEvents/autoEventsScreen2.tsx" })}
+                            onClick={async () => await model.openNewTab({ path: "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/tutorial/autoEvents/autoEventsScreen2.tsx" })}
                         />
                     </Row>
                 ),
