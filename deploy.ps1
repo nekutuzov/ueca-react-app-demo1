@@ -29,6 +29,12 @@ Get-ChildItem -Path "dist" -Force | Where-Object { $_.Name -ne ".git" } | ForEac
     Copy-Item -Path $_.FullName -Destination $deployPath -Recurse -Force
 }
 
+# GitHub Pages is a static host with no SPA fallback, so a direct request for /charts has no file
+# to serve and returns GitHub's own 404 page. Pages does serve 404.html for unmatched paths, and
+# the app routes from window.location, so an identical copy makes deep links work.
+Write-Host "Writing 404.html for SPA deep links..." -ForegroundColor Yellow
+Copy-Item -Path (Join-Path $deployPath "index.html") -Destination (Join-Path $deployPath "404.html") -Force
+
 # Ensure git remote is configured
 Write-Host "Verifying git configuration..." -ForegroundColor Cyan
 Push-Location $deployPath
