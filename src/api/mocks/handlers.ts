@@ -90,11 +90,17 @@ const handlers = [
 export async function initMocks() {
     // Await the worker before the application starts: a deep link such as /charts issues its API call
     // during startup, and a request made before the worker intercepts reaches the dev server as a 404.
-    const worker = setupWorker(...handlers);
-    await worker.start({
-        serviceWorker: {
-            url: "/ueca-react-app-demo1/mockServiceWorker.js",
-        },
-        onUnhandledRequest: "bypass",
-    });
+    // Registration failing must not stop the app booting - main.tsx awaits this before runApplication(),
+    // which is also what installs globalSettings.errorHandler, so nothing else would catch a throw here.
+    try {
+        const worker = setupWorker(...handlers);
+        await worker.start({
+            serviceWorker: {
+                url: "/ueca-react-app-demo1/mockServiceWorker.js",
+            },
+            onUnhandledRequest: "bypass",
+        });
+    } catch (error) {
+        console.error("MSW worker failed to start. API requests will not be mocked.", error);
+    }
 }
