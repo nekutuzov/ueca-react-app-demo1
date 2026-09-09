@@ -6,7 +6,7 @@ import { AbortExecutionException, Application, appMessageBus, runApplication } f
 UECA.globalSettings.traceLog = false;
 
 // Remove mock after integrating with a real backend API
-initMocks();
+await initMocks();
 
 // Application starting point
 runApplication(

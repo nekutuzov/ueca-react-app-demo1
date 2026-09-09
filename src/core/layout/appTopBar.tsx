@@ -62,13 +62,13 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
             userIconButton: useIconButton({
                 iconView: <AccountCircle />,
                 color: "inherit",
-                onClick: async () => await model.bus.unicast("App.Security.Unauthorize", undefined)
+                onClick: async () => await model.bus.unicast("App.Security.Unauthorize")
             }),
         },
 
         init: async () => {
             // Sync switch state with current theme mode
-            const currentTheme = await model.bus.unicast("App.Theme.GetMode", undefined);
+            const currentTheme = await model.bus.unicast("App.Theme.GetMode");
             model.themeToggle.checked = currentTheme === "dark";
         },
 

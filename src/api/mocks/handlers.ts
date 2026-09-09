@@ -87,15 +87,14 @@ const handlers = [
 ];
 
 
-export function initMocks() {
-    // Initialize MSW worker by delaying the setup to avoid issues in the main thread during app startup
-    setTimeout(async () => {
-        const worker = setupWorker(...handlers);
-        await worker.start({
-            serviceWorker: {
-                url: "/ueca-react-app-demo1/mockServiceWorker.js",
-            },
-            onUnhandledRequest: "bypass",
-        })
-    }, 10);
+export async function initMocks() {
+    // Await the worker before the application starts: a deep link such as /charts issues its API call
+    // during startup, and a request made before the worker intercepts reaches the dev server as a 404.
+    const worker = setupWorker(...handlers);
+    await worker.start({
+        serviceWorker: {
+            url: "/ueca-react-app-demo1/mockServiceWorker.js",
+        },
+        onUnhandledRequest: "bypass",
+    });
 }

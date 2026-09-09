@@ -145,7 +145,7 @@ function useDashboardScreen(params?: DashboardScreenParams): DashboardScreenMode
         methods: {
             doOnRefresh: async () => {
                 // Fetch user count from API
-                const users = await model.bus.unicast("Api.GetUsers", undefined);
+                const users = await model.bus.unicast("Api.GetUsers");
 
                 // Update pie chart with country data
                 const countryChartData = model._generateCountryChartData(users || []);

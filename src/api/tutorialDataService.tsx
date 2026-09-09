@@ -2,7 +2,7 @@ import * as UECA from "ueca-react";
 import { ZipCodeInfo } from "@api";
 import { TutorialDataServiceMessage } from "@core";
 
-type TutorialDataServiceStruct = UECA.ComponentStruct<{}, TutorialDataServiceMessage>;
+type TutorialDataServiceStruct = UECA.ComponentStruct<UECA.EmptyObject, TutorialDataServiceMessage>;
 
 type TutorialDataServiceModel = UECA.ComponentModel<TutorialDataServiceStruct>;
 

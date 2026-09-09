@@ -6,12 +6,12 @@ import { Row, Col, UIBaseModel, UIBaseParams, UIBaseStruct, useUIBase } from "@c
 type ValueDisplayStruct = UIBaseStruct<{
     props: {
         label: string;
-        value: any;
+        value: unknown;
         units?: string;
     };
 
     events: {
-        onValueRender?: (value: any) => React.ReactNode;
+        onValueRender?: (value: unknown) => React.ReactNode;
     };
 
     methods: {
@@ -36,7 +36,7 @@ function useValueDisplay(params?: ValueDisplayParams): ValueDisplayModel {
                 if (model.onValueRender) {
                     return model.onValueRender(model.value);
                 }
-                return model.value?.toString() || "";
+                return String(model.value ?? "");
             },
         },
 

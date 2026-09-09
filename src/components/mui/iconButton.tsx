@@ -78,8 +78,8 @@ const buttonTypes = {
 const IconButton = UECA.getFC(useIconButton);
 
 // Predefined IconButtons
-const OKIconButton = (params: IconButtonParams) => <IconButton id={"closeIButton"} kind={"ok"} {...params} />
-const CancelIconButton = (params: IconButtonParams) => <IconButton id={"closeIButton"} kind={"cancel"} {...params} />
+const OKIconButton = (params: IconButtonParams) => <IconButton id={"okIButton"} kind={"ok"} {...params} />
+const CancelIconButton = (params: IconButtonParams) => <IconButton id={"cancelIButton"} kind={"cancel"} {...params} />
 const CloseIconButton = (params: IconButtonParams) => <IconButton id={"closeIButton"} kind={"close"} {...params} />
 const DeleteIconButton = (params: IconButtonParams) => <IconButton id={"deleteIButton"} kind={"delete"} {...params} />
 const RefreshIconButton = (params: IconButtonParams) => <IconButton id={"refreshIButton"} kind={"refresh"} {...params} />

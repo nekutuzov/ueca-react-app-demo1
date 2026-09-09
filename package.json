@@ -12,7 +12,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy.ps1"
+    "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy.ps1",
+    "postinstall": "node -e \"const fs=require('fs'),s='node_modules/ueca-react/skills';if(fs.existsSync(s))for(const d of fs.readdirSync(s,{withFileTypes:true}).filter(e=>e.isDirectory()))fs.cpSync(s+'/'+d.name,'.claude/skills/'+d.name,{recursive:true})\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -29,7 +30,7 @@
     "react-dom": "^19.0.0",
     "react-virtuoso": "^4.14.1",
     "styled-components": "^6.1.19",
-    "ueca-react": "^2.0.6"
+    "ueca-react": "^3.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

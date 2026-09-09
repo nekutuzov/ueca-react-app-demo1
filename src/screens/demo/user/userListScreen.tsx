@@ -90,7 +90,7 @@ function useUserListScreen(params?: UserListScreenParams): UserListScreenModel {
 
         methods: {
             doOnRefresh: async () => {
-                const allUsers = await model.bus.unicast("Api.GetUsers", undefined);
+                const allUsers = await model.bus.unicast("Api.GetUsers");
 
                 // Filter users based on the checkbox state
                 if (model.showActiveOnlyCheckbox.checked) {

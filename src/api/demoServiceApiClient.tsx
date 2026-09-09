@@ -76,7 +76,7 @@ function useDemoServiceApiClient(): DemoServiceApiClientModel {
     async function _onUnauthorized() {
         // Handle unauthorized response from API
         // E.g., log out the user and redirect to login page, automatically reauthorize using refresh token, etc.        
-        await model.bus.unicast("App.Security.Unauthorize", undefined);
+        await model.bus.unicast("App.Security.Unauthorize");
     }
 };
 

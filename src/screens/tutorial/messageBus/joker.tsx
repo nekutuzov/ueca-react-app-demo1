@@ -37,7 +37,7 @@ function useJoker(params?: JokerParams): JokerModel {
                     // Post a message to common Message Bus and retrieve an answer.
                     model.jokeText = "Please wait...";
                     model.onMessageBusInteraction?.("Requested a joke from message bus");
-                    model.jokeText = await model.bus.unicast("Tutorial.MakeJoke", undefined);
+                    model.jokeText = await model.bus.unicast("Tutorial.MakeJoke");
                 },
             }),
         },

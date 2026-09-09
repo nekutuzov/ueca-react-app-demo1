@@ -75,7 +75,7 @@ function useChartListScreen(params?: ChartListScreenParams): ChartListScreenMode
 
         methods: {
             doOnRefresh: async () => {
-                model.chartsTable.data = await model.bus.unicast("Api.GetCharts", undefined);
+                model.chartsTable.data = await model.bus.unicast("Api.GetCharts");
             },
 
             contentView: () => (

@@ -6,9 +6,9 @@ function runApplication(AppView: () => UECA.ReactElement, rootElementId: string,
         UECA.globalSettings.errorHandler = onExcept;
         const root = createRoot(document.getElementById(rootElementId));
         root.render(
-            // Don't wrap in React.StrictMode!
-            // StrictMode causes double execution of UECA life-cycle hooks that leads to many issues.
-            // UECA abstracts away React from the developer, so React.StrictMode is not needed.
+            // React.StrictMode is supported as of ueca-react 3.0 (its double-invoked renders no longer
+            // inflate the mount count, so unmount/deinit still run). It stays off here because UECA
+            // abstracts React away from the developer, so it buys this application nothing.
             <AppView />
         );
     } catch (e) {

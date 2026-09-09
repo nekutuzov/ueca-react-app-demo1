@@ -61,7 +61,7 @@ function useMessageBusPanel(params?: MessageBusPanelParams): MessageBusPanelMode
 
         init: async () => {
             // Initialize side bar local state
-            const state = await model.bus.unicast("App.GetSideBarState", undefined);
+            const state = await model.bus.unicast("App.GetSideBarState");
             model.onMessageBusInteraction?.("Initialized side bar state from message bus: " + (state.collapsed ? "Collapsed" : "Expanded"));
             model._appSideBarCollapsed = state.collapsed;
         },
