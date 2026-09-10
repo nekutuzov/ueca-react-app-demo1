@@ -1,5 +1,6 @@
 # Deploy script - Copy build files to deployment folder
 $deployPath = "..\ueca-react-app-demo1-deploy"
+$repoUrl = "https://github.com/nekutuzov/ueca-react-app-demo1.git"
 
 Write-Host "Building application..." -ForegroundColor Cyan
 npm run build
@@ -11,10 +12,21 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Deploying to $deployPath..." -ForegroundColor Cyan
 
-# Create deploy directory if it doesn't exist
+# The deploy folder is a single-branch clone of gh-pages: the build is committed and pushed
+# from there. Creating a bare directory instead leaves an unpushable folder while still
+# reporting success, so clone when it is absent and refuse to guess when it is not a clone.
 if (-not (Test-Path $deployPath)) {
-    Write-Host "Creating deployment directory..." -ForegroundColor Yellow
-    New-Item -ItemType Directory -Path $deployPath -Force | Out-Null
+    Write-Host "Deployment directory missing. Cloning gh-pages..." -ForegroundColor Yellow
+    git clone --branch gh-pages --single-branch $repoUrl $deployPath
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Clone failed!" -ForegroundColor Red
+        exit 1
+    }
+} elseif (-not (Test-Path (Join-Path $deployPath ".git"))) {
+    Write-Host "$deployPath exists but is not a git clone, so the build cannot be pushed." -ForegroundColor Red
+    Write-Host "Move it aside and re-run, or clone gh-pages there yourself:" -ForegroundColor Red
+    Write-Host "  git clone --branch gh-pages --single-branch $repoUrl $deployPath" -ForegroundColor Red
+    exit 1
 } else {
     # Remove old files from deploy directory (except .git)
     Write-Host "Cleaning deployment directory..." -ForegroundColor Yellow
@@ -41,7 +53,7 @@ Push-Location $deployPath
 $hasRemote = git remote | Select-String -Pattern "origin" -Quiet
 if (-not $hasRemote) {
     Write-Host "Adding git remote..." -ForegroundColor Yellow
-    git remote add origin https://github.com/nekutuzov/ueca-react-app-demo1.git
+    git remote add origin $repoUrl
     Write-Host "Remote added successfully!" -ForegroundColor Green
 } else {
     Write-Host "Git remote already configured." -ForegroundColor Green
