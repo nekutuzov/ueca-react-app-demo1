@@ -180,7 +180,8 @@ native MUI prop. Declare `ReactElement` props as `[PropertyName]View`. Follow
 - Message catalogue: `src/core/infrastructure/appMessage.ts`. A message with no `in` is
   `UECA.EmptyObject` and takes **no argument** when posted.
 - Routes: `src/core/infrastructure/appRoutes.tsx`, resolved by `AppRouter`, with `AppLayout`
-  (sidebar/nav) and `OtherLayout` (minimal) selected per route.
+  (sidebar/nav) and `OtherLayout` (minimal) selected per route. A route matches the whole path, never
+  its tail.
 - API: service clients are ordinary components with `messages:` handlers and no view
   (`src/api/demoServiceApiClient.tsx`). Screens reach them over the bus, never by import.
 - Errors: `UECA.globalSettings.errorHandler` catches everything (set in `appStart.tsx`), so
