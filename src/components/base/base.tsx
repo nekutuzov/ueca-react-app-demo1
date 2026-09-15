@@ -33,7 +33,9 @@ type BasePartialStruct = UECA.ComponentStruct<{
         clearAppBusy: () => Promise<void>;              // Set the call count to 0 and set busy state to false
 
         // Misc
-        runWithErrorDisplay: <P, R>(action: (params?: P) => Promise<R>, params?: P) => Promise<R>;
+        // Displays the error and RESOLVES rather than rethrowing, so a caller that must finish
+        // (a navigation guard returning a boolean) still does. Yields undefined when it failed.
+        runWithErrorDisplay: <P, R>(action: (params?: P) => Promise<R>, params?: P) => Promise<R | undefined>;
         runWithBusyDisplay: <T>(action: () => Promise<T>) => Promise<T>;
         copyToClipboard: (content: string) => Promise<void>;
 
@@ -78,7 +80,9 @@ function useBase<T extends BasePartialStruct>(extStruct: T, params?: BaseParams<
             clearAppBusy: async () => await model.bus.unicast("BusyDisplay.Clear"),
 
             // Misc
-            runWithErrorDisplay: async (p) => await _runWithErrorDisplay(p),
+            // Both arguments forwarded: the params used to be dropped, so an action that took them
+            // ran with undefined.
+            runWithErrorDisplay: async (action, params) => await _runWithErrorDisplay(action, params),
             runWithBusyDisplay: async (action) => await _runWithBusyDisplay(action),
             selectFiles: async (fileMask, multiselect) => await model.bus.unicast("App.SelectFiles", { fileMask, multiselect }),
         }
@@ -88,7 +92,7 @@ function useBase<T extends BasePartialStruct>(extStruct: T, params?: BaseParams<
     return model;
 
     // Private methods
-    async function _runWithErrorDisplay<P, R>(action: (params?: P) => Promise<R>, params?: P): Promise<R> {
+    async function _runWithErrorDisplay<P, R>(action: (params?: P) => Promise<R>, params?: P): Promise<R | undefined> {
         try {
             return await action(params);
         } catch (error) {
