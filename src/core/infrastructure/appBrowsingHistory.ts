@@ -11,6 +11,9 @@ type AppBrowsingHistoryStruct = BaseStruct<{
         __baseURL: string;
         __appTitle: string;
         __currentHistoryIndex: number;
+        // Held so the popstate listener can be detached: syncWithBrowser is callable more than
+        // once, and a listener left behind by an unmounted model kept answering Back and Forward.
+        __popstateHandler: (event: PopStateEvent) => void;
     },
 
     methods: {
@@ -52,7 +55,12 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
                     console.info("<base> element is missing in index.html. Using empty string as base URL.");  
                     model.__baseURL = "";
                 }  
-                window.addEventListener("popstate", () => asyncSafe(async () => await _browserNavigation()));
+                // Detach any listener a previous call left behind before adding this one. Without
+                // it a second syncWithBrowser() leaves two interceptors racing over one popstate,
+                // each rolling back against its own idea of the current index.
+                _detachPopstate();
+                model.__popstateHandler = () => asyncSafe(async () => await _browserNavigation());
+                window.addEventListener("popstate", model.__popstateHandler);
                 _syncCurrentPath();
             },
 
@@ -103,9 +111,22 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
         },
 
         init: async () => {
+            // Brought back from the model cache, the model has had its listener detached by deinit,
+            // and constr — the only other place it is attached — does not run again: Back and
+            // Forward went unheard. Syncing again also catches up with an address that moved while
+            // it was parked. On first activation constr has just done this, so it is skipped.
+            if (!model.__popstateHandler) {
+                model.syncWithBrowser();
+            }
             const appInfo = await model.bus.unicast("App.GetInfo");
             model.__appTitle = appInfo?.appName;
             _syncDocumentTitle();
+        },
+
+        // Paired with the listener syncWithBrowser installs. deinit is a DEACTIVATION hook rather
+        // than destruction - it can be followed by another init, which re-attaches it.
+        deinit: () => {
+            _detachPopstate();
         }
     }
 
@@ -133,6 +154,14 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             ? window.location.pathname.substring(model.__baseURL.length)
             : "";
         window.document.title = path ? `${model.__appTitle}: ${path}` : model.__appTitle;
+    }
+
+    function _detachPopstate() {
+        if (!model.__popstateHandler) {
+            return;
+        }
+        window.removeEventListener("popstate", model.__popstateHandler);
+        model.__popstateHandler = undefined;
     }
 
     // noopener closes the reverse-tabnabbing hole: without it the opened page gets a live
