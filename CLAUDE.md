@@ -182,6 +182,9 @@ native MUI prop. Declare `ReactElement` props as `[PropertyName]View`. Follow
 - Routes: `src/core/infrastructure/appRoutes.tsx`, resolved by `AppRouter`, with `AppLayout`
   (sidebar/nav) and `OtherLayout` (minimal) selected per route. A route matches the whole path, never
   its tail.
+- `App.Router.BeforeRouteChange` and `App.Router.AfterRouteChange` are sent with **`broadcast`**, so
+  any number of models may subscribe. A guard vetoes only by returning `false`; returning nothing lets
+  the navigation through.
 - API: service clients are ordinary components with `messages:` handlers and no view
   (`src/api/demoServiceApiClient.tsx`). Screens reach them over the bus, never by import.
 - Errors: `UECA.globalSettings.errorHandler` catches everything (set in `appStart.tsx`), so

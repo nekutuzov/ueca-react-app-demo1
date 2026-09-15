@@ -69,8 +69,15 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
             route = { path: "/" }
         }
 
-        const allowRoute = await model.bus.unicast("App.Router.BeforeRouteChange", route);
-        if (UECA.isUndefined(allowRoute) || allowRoute) {
+        // BROADCAST, not unicast. A route change is an announcement that any number of models may
+        // answer — a CRUD screen vetoing on unsaved changes, another guarding its own state — and
+        // unicast expects exactly one subscriber, throwing before it dispatches anything when a
+        // second one appears (the app menu and any other AfterRouteChange listener, for one).
+        //
+        // Only an explicit `false` vetoes. A subscriber that returns nothing reacted to the
+        // navigation rather than judging it, and must not block it.
+        const answers = await model.bus.broadcast(null, "App.Router.BeforeRouteChange", route);
+        if (answers.every((allow) => allow !== false)) {
             if (historyTrack) {
                 await model.bus.unicast("App.BrowsingHistory.Open", { path: route });
             } else {
@@ -79,7 +86,7 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
 
             newLayout.route = route;
             model._activeLayout = newLayout;
-            await model.bus.unicast("App.Router.AfterRouteChange", route);
+            await model.bus.broadcast(null, "App.Router.AfterRouteChange", route);
             return true;
         }
         return false;
