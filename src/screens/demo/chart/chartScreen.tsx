@@ -318,6 +318,18 @@ function useChartScreen(params?: ChartScreenParams): ChartScreenModel {
             ),
         },
 
+        events: {
+            // A route to another chart reuses this screen: the router keeps the cached model, so init —
+            // where the record is loaded — does not run again, and the previous chart stayed on show
+            // under the new address. Not for the record already on show: a new chart that has just
+            // been saved takes its id this way.
+            onChangeRouteParams: async () => {
+                if (model.routeParams?.id !== model.chart?.id) {
+                    await model.crudScreen.refresh();
+                }
+            }
+        },
+
         init: async () => {
             await model.crudScreen.refresh();
         },

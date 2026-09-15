@@ -175,6 +175,10 @@ native MUI prop. Declare `ReactElement` props as `[PropertyName]View`. Follow
 
 - `CrudScreen` (`src/screens/layout/crudScreen.tsx`) — save/cancel/delete/refresh/validation
   workflow. It subscribes to `App.Router.BeforeRouteChange` to guard unsaved changes.
+- A record screen (`/users/:id`, `/charts/:id`) is **reused, not rebuilt**, when the route moves to
+  another record: the router remounts its view but UECA keeps the cached model, so `init` does not run
+  again. Load the record in `onChangeRouteParams` too, skipping the record already on show — which is
+  how a new record takes its id after saving (`updateRouteParams`). See `userScreen.tsx`.
 - `TabsScreen` — `CrudScreen` plus a tab container.
 - Demo screens: `src/screens/demo/{dashboard,user,chart}`
 - Tutorials: `src/screens/tutorial/{toolbar,bindings,messageBus,autoEvents}` — each pairs an

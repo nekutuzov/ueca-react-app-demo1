@@ -245,6 +245,18 @@ function useUserScreen(params?: UserScreenParams): UserScreenModel {
 
         },
 
+        events: {
+            // A route to another user reuses this screen: the router keeps the cached model, so init —
+            // where the record is loaded — does not run again, and the previous user stayed on show
+            // under the new address. Not for the record already on show: a new user that has just
+            // been saved takes its id this way.
+            onChangeRouteParams: async () => {
+                if (model.routeParams?.id !== model.user?.id) {
+                    await model.crudScreen.refresh();
+                }
+            }
+        },
+
         init: async () => {
             await model.crudScreen.refresh();
         },
