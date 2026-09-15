@@ -40,27 +40,36 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
 
             themeToggle: useSwitch({
                 color: "default",
+                // The switch has no visible label, so its input is named here. MUI replaces its own
+                // input slot props (role "switch") with these rather than merging, so the role is
+                // restated, or the switch would be announced as a checkbox.
+                mui: { slotProps: { input: { role: "switch", "aria-label": "Dark theme" } } },
                 onChange: async () => {
                     await model.bus.unicast("App.Theme.SetMode", model.themeToggle.checked ? "dark" : "light");
                 },
             }),
             youtubeIconButton: useIconButton({
                 iconView: <YouTubeIcon />,
+                title: "UECA-React video on YouTube",
                 color: "inherit",
                 onClick: async () => await model.openNewTab({path: "https://youtu.be/SQl8f-qGxwU?si=-YTWPpPB7ExBZ6L0"})
             }),
             githubIconButton: useIconButton({
                 iconView: <GitHubIcon />,
+                title: "Source code on GitHub",
                 color: "inherit",
                 onClick: async () => await model.openNewTab({path: "https://github.com/nekutuzov/ueca-react-app-demo1"})
             }),
             npmIconButton: useIconButton({
                 iconView: <Inventory2Icon />,
+                title: "ueca-react on npm",
                 color: "inherit",
                 onClick: async () => await model.openNewTab({path: "https://www.npmjs.com/package/ueca-react"})
             }),
             userIconButton: useIconButton({
                 iconView: <AccountCircle />,
+                // The account icon signs out at once; the title says so before the click does.
+                title: "Sign out",
                 color: "inherit",
                 onClick: async () => await model.bus.unicast("App.Security.Unauthorize")
             }),

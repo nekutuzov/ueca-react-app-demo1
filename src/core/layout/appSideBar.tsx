@@ -39,6 +39,7 @@ function useAppSideBar(params?: AppSideBarParams): AppSideBarModel {
 
             toggleButton: useIconButton({
                 iconView: () => model.collapsed ? <MenuIcon /> : <MenuOpenIcon />,
+                title: () => model.collapsed ? "Expand menu" : "Collapse menu",
                 size: "small",
                 onClick: () => model.toggleCollapse()
             }),
