@@ -94,8 +94,10 @@ function useAppMenu(params?: AppMenuParams): AppMenuModel {
         const menuItems = model.getChildrenModels("static")?.
             filter(c => c.id.endsWith("MenuItem")) as NavItemModel[];
 
+        // "/" is the Home screen too (appRoutes.tsx), so it marks Home as the active entry.
+        const path = route?.path === "/" ? "/home" : route?.path;
         menuItems.forEach(menuItem => {
-            menuItem.active = route?.path?.startsWith(menuItem.route?.path);
+            menuItem.active = path?.startsWith(menuItem.route?.path);
         });
     }
 }
