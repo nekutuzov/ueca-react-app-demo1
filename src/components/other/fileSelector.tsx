@@ -31,44 +31,61 @@ function useFileSelector(params?: BaseParams<FileSelectorStruct>): FileSelectorM
 
     // Private methods
     async function _selectFiles(fileMask: string, multiselect: boolean): Promise<File[]> {
-        const promise = new Promise<File[]>((resolve) => {
-            const input = document.getElementById(model.htmlId()) as HTMLInputElement;
-            if (!input) {
-                throw Error(`DOM element id="${model.htmlId()}" not found`);
-            }
+        const input = document.getElementById(model.htmlId()) as HTMLInputElement;
+        if (!input) {
+            throw Error(`DOM element id="${model.htmlId()}" not found`);
+        }
 
-            input.accept = fileMask;
-            input.multiple = multiselect;
+        input.accept = fileMask;
+        input.multiple = multiselect;
+        // Reset, so choosing the same file as last time still fires "change".
+        input.value = "";
 
-            input.onchange = () => {
-                if (!input.files?.length) {
-                    resolve(undefined);
-                } else {
-                    const files: File[] = [];
+        return new Promise<File[]>((resolve) => {
+            let settled = false;
+
+            // Every outcome settles the promise exactly once and removes all three listeners. The
+            // cancel path used to watch document.body.onfocus, which never fires when the page
+            // regains focus, so dismissing the picker left the caller waiting for ever.
+            const settle = (files?: File[]) => {
+                if (settled) {
+                    return;
+                }
+                settled = true;
+                input.removeEventListener("change", onChange);
+                input.removeEventListener("cancel", onCancel);
+                window.removeEventListener("focus", onFocusFallback);
+                resolve(files);
+            };
+
+            const onChange = () => {
+                const files: File[] = [];
+                if (input.files) {
                     for (let i = 0; i < input.files.length; i++) {
                         files.push(input.files[i]);
                     }
-                    resolve(files);
                 }
-            }
-
-            const oldOnFocus = document.body.onfocus;
-            document.body.onfocus = () => {
-                document.body.onfocus = oldOnFocus;
-                setTimeout(() => {
-                    if (!input.files.length) {
-                        resolve(undefined);
-                    }
-                }, 100);
+                settle(files.length ? files : undefined);
             };
 
-            setTimeout(() => {
-                input.focus();
-                input.click();
-            });
-        });
+            const onCancel = () => settle(undefined);
 
-        return promise;
+            // For browsers without the native "cancel" event: when the window regains focus after the
+            // picker closes, give "change" a moment to win, then treat an empty selection as a cancel.
+            const onFocusFallback = () => {
+                setTimeout(() => {
+                    if (!input.files?.length) {
+                        settle(undefined);
+                    }
+                }, 300);
+            };
+
+            input.addEventListener("change", onChange, { once: true });
+            input.addEventListener("cancel", onCancel, { once: true });
+            window.addEventListener("focus", onFocusFallback, { once: true });
+
+            input.click();
+        });
     }
 }
 
