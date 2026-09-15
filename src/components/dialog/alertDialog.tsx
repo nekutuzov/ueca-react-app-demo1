@@ -43,7 +43,10 @@ function useAlertDialog(params?: AlertDialogParams): AlertDialogModel {
             id: useAlertDialog.name,
             buttons: { cancel: true },
             contentView: undefined,
-            detailsOpen: false,
+            // The details panel's own state, read and written through. A plain prop connected to
+            // nothing, it could not put the panel away on close: the panel outlived its dialog, and
+            // the dialog came back hidden behind it the next time it opened.
+            detailsOpen: UECA.bind(() => model.detailsDrawer, "open"),
             detailsView: undefined,
             open: false,
             titleView: undefined,
@@ -105,7 +108,7 @@ function useAlertDialog(params?: AlertDialogParams): AlertDialogModel {
 
         View: () => <>
             <model.dialog.View />
-            < model.detailsDrawer.View />
+            <model.detailsDrawer.View />
         </>
     };
 
