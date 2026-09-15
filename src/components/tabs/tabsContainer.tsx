@@ -13,7 +13,10 @@ type TabsContainerStruct = EditBaseStruct<{
         variant: "standard" | "scrollable" | "fullWidth";
         scrollButtons: "auto" | true | false;
         centered: boolean;
-        __defaultTabId: string;
+        // A selectedTabId waiting for its tab to exist. Reactive, because selectedTabId reads it
+        // first: as a non-reactive prop, using it up did not make that read look again, and the id
+        // went on being reported after another tab was selected in its place.
+        _defaultTabId: string;
     };
 
     methods: {
@@ -37,12 +40,15 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
             tabs: [],
             selectedTab: undefined,
             selectedTabId: UECA.bind(
-                () => model.__defaultTabId ?? model.selectedTab?.getTabId(),
+                () => model._defaultTabId ?? model.selectedTab?.getTabId(),
                 (v) => {
                     if (model.tabs?.length) {
-                        model.selectedTab = v ? model.getTab(v) : model.tabs[0]
+                        // An id that names no tab falls back to the first, as it does at start-up.
+                        // Looked up alone, it deselected every tab and blanked the panel — a stale
+                        // tab id in a route bound to a TabsScreen would do exactly that.
+                        model.selectedTab = (v && model.getTab(v)) || model.tabs[0];
                     } else {
-                        model.__defaultTabId = v;
+                        model._defaultTabId = v;
                     }
                 }
             ),
@@ -54,6 +60,7 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
             variant: undefined,
             scrollButtons: undefined,
             centered: false,
+            _defaultTabId: undefined
         },
 
         methods: {
@@ -121,9 +128,9 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
 
         model.tabs?.map(t => { t.container = model; })
 
-        if (model.__defaultTabId) {
-            const defaultTabId = model.__defaultTabId;
-            model.__defaultTabId = undefined; // Clear after use, so it used only once
+        if (model._defaultTabId) {
+            const defaultTabId = model._defaultTabId;
+            model._defaultTabId = undefined; // Clear after use, so it used only once
             model.selectedTab = model.getTab(defaultTabId);
         }
 
