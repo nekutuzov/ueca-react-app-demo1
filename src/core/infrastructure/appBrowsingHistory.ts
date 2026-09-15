@@ -33,8 +33,11 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             getActivePath: () => model.__activePath,
 
             syncWithBrowser: () => {
-                // Set initial history index (the top of the list)
-                model.__currentHistoryIndex = window.history.state?.index ?? 1;
+                // A reload keeps the index its entry was given. Otherwise the page has just been
+                // opened as the newest entry, so its index is its position: history.length - 1. A
+                // fixed 1 was right only for a tab's second entry; anywhere else a vetoed Back to
+                // this entry rolled forward by the wrong distance.
+                model.__currentHistoryIndex = window.history.state?.index ?? history.length - 1;
                 history.replaceState({ index: model.__currentHistoryIndex }, "", window.location.href);
 
                 // Setup the browser's navigation interceptor
@@ -180,13 +183,11 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             return;
         }
 
-        model.__currentHistoryIndex = history.length;
+        // The new entry comes straight after the one the browser is on, so its index is one more.
+        // Counting from history.length instead broke whenever the push dropped entries: the ones
+        // ahead of the current entry after a Back, or the oldest once the browser's history is full.
+        model.__currentHistoryIndex = (history.state?.index ?? model.__currentHistoryIndex) + 1;
         history.pushState({ index: model.__currentHistoryIndex }, "", url);
-        if (history.length - model.__currentHistoryIndex === 1) {
-            // History was truncated or abnormally changes by the browser. Synchronize the state.
-            model.__currentHistoryIndex = history.length - 1;
-            history.replaceState({ index: model.__currentHistoryIndex }, "", url);
-        }
         _syncCurrentPath();
     }
 }
