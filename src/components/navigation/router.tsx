@@ -39,6 +39,25 @@ function useRouter(params?: RouterParams): RouterModel {
             _currentView: undefined
         },
 
+        methods: {
+            lookupRoute: (path) => {
+                if (!path) {
+                    return;
+                }
+                const routeMeta = _getRegExRoute(path);
+                return routeMeta.regExRoute ? routeMeta.matchedRoute : undefined;
+            },
+
+            setPath: (path) => {
+                const route = model.lookupRoute(path)
+                if (!route) {
+                    return false;
+                }
+                model.route = route;
+                return !!model.route;
+            }
+        },
+
         events: {
             onChangeRoutes: () => {
                 model.__regExRoutes = undefined; // reset routes cache
@@ -61,25 +80,6 @@ function useRouter(params?: RouterParams): RouterModel {
                 const RouteView: RouteComp = model.routes[model.route.path];
                 model._currentView = RouteView(model.route.params);
                 //model._currentView = <RouteView p={model.route.params} />;
-            }
-        },
-
-        methods: {
-            lookupRoute: (path) => {
-                if (!path) {
-                    return;
-                }
-                const routeMeta = _getRegExRoute(path);
-                return routeMeta.regExRoute ? routeMeta.matchedRoute : undefined;
-            },
-
-            setPath: (path) => {
-                const route = model.lookupRoute(path)
-                if (!route) {
-                    return false;
-                }
-                model.route = route;
-                return !!model.route;
             }
         },
 

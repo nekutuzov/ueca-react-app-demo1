@@ -43,6 +43,10 @@ function useSnackbar(params?: SnackbarParams): SnackbarModel {
             closeReasons: undefined
         },
 
+        methods: {
+            _slideTransition: (props) => <Slide {...props} direction="left" />,
+        },
+
         events: {
             onChangeOpen: () => {
                 if (model.open) {
@@ -51,10 +55,6 @@ function useSnackbar(params?: SnackbarParams): SnackbarModel {
                     asyncSafe(() => model.onClose?.(model));
                 }
             }
-        },
-
-        methods: {
-            _slideTransition: (props) => <Slide {...props} direction="left" />,
         },
 
         constr: () => {

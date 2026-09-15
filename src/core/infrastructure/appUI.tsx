@@ -41,16 +41,6 @@ function useAppUI(params?: AppUIParams): AppUIModel {
             fileSelector: useFileSelector(),
         },
 
-        messages: {
-            "App.UnhandledException": async (error) => {
-                _processUnhandledException(error, true);
-            },
-
-            "App.SelectFiles": async (p) => {
-                return await model.fileSelector.select(p.fileMask, p.multiselect);
-            },
-        },
-
         methods: {
             appView: () => {
                 // return <AppRouter id={"router"} />;
@@ -58,6 +48,16 @@ function useAppUI(params?: AppUIParams): AppUIModel {
                     return <AppRouter id={"router"} />;
                 }
                 return <AppLoginForm id={"loginForm"} />;
+            },
+        },
+
+        messages: {
+            "App.UnhandledException": async (error) => {
+                _processUnhandledException(error, true);
+            },
+
+            "App.SelectFiles": async (p) => {
+                return await model.fileSelector.select(p.fileMask, p.multiselect);
             },
         },
 

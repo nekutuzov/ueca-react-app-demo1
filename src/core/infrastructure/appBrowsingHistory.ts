@@ -26,14 +26,6 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             id: useAppBrowsingHistory.name
         },
 
-        messages: {
-            "App.BrowsingHistory.GetActivePath": async () => model.getActivePath(),
-
-            "App.BrowsingHistory.Open": async (p) => await model.open(p.path, p.newTab),
-
-            "App.BrowsingHistory.Replace": async (p) => await model.replace(p.path)
-        },
-
         methods: {
             getActivePath: () => model.__activePath,
 
@@ -78,6 +70,14 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
                 runAsync(() => { model.__currentHistoryIndex = history.state.index });
                 _syncCurrentPath();
             }
+        },
+
+        messages: {
+            "App.BrowsingHistory.GetActivePath": async () => model.getActivePath(),
+
+            "App.BrowsingHistory.Open": async (p) => await model.open(p.path, p.newTab),
+
+            "App.BrowsingHistory.Replace": async (p) => await model.replace(p.path)
         },
 
         // The active path is derived from window.location alone, so it is established here, in the

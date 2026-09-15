@@ -65,6 +65,22 @@ function useAutoEventsPanel2(params?: AutoEventsPanel2Params): AutoEventsPanel2M
             }),
         },
 
+        methods: {
+            _fullNameView: () => (
+                // Workaroud for MUI text field loosing focus on re-rendering while still in onChange context.        
+                // Actually this is even better for rendering performance and readability.
+                // Only the full name view will re-render when fullName changes, not the entire panel.
+                <Row spacing="small" verticalAlign="center">
+                    <Typography variant="body2" color="textSecondary">
+                        Computed Full Name:
+                    </Typography>
+                    <Typography variant="body2" fontWeight="bold">
+                        {model.fullName || "(empty)"}
+                    </Typography>
+                </Row>
+            ),
+        },
+
         events: {
             onChangingFirstName: (newValue, oldValue) => {
                 // Automatic event onChanging<PropName>
@@ -112,22 +128,6 @@ function useAutoEventsPanel2(params?: AutoEventsPanel2Params): AutoEventsPanel2M
                 // This fires AFTER the property has changed. You can perform side effects here.
                 model.onActivityLog?.(`[Panel Handler] onChangeFullName: "${oldVal}" → "${newVal}"`);
             }
-        },
-
-        methods: {
-            _fullNameView: () => (
-                // Workaroud for MUI text field loosing focus on re-rendering while still in onChange context.        
-                // Actually this is even better for rendering performance and readability.
-                // Only the full name view will re-render when fullName changes, not the entire panel.
-                <Row spacing="small" verticalAlign="center">
-                    <Typography variant="body2" color="textSecondary">
-                        Computed Full Name:
-                    </Typography>
-                    <Typography variant="body2" fontWeight="bold">
-                        {model.fullName || "(empty)"}
-                    </Typography>
-                </Row>
-            ),
         },
 
         View: () => (

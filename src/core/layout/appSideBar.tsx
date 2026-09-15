@@ -32,13 +32,6 @@ function useAppSideBar(params?: AppSideBarParams): AppSideBarModel {
             collapsed: false
         },
 
-        events: {
-            onChangeCollapsed: async (collapsed: boolean) => {
-                // Post a broadcast message to notify side bar state change
-                await model.bus.broadcast("", "App.SideBarStateChanged", { collapsed });
-            }
-        },
-
         children: {
             menu: useAppMenu({
                 collapsed: () => model.collapsed
@@ -59,6 +52,19 @@ function useAppSideBar(params?: AppSideBarParams): AppSideBarModel {
             })
         },
 
+        methods: {
+            toggleCollapse: () => {
+                model.collapsed = !model.collapsed;
+            }
+        },
+
+        events: {
+            onChangeCollapsed: async (collapsed: boolean) => {
+                // Post a broadcast message to notify side bar state change
+                await model.bus.broadcast("", "App.SideBarStateChanged", { collapsed });
+            }
+        },
+
         messages: {
             "App.GetSideBarState": async () => {
                 return { collapsed: model.collapsed };
@@ -71,12 +77,6 @@ function useAppSideBar(params?: AppSideBarParams): AppSideBarModel {
             "App.ToggleSideBarState": async () => {
                 model.toggleCollapse();
                 return { collapsed: model.collapsed };
-            }
-        },
-
-        methods: {
-            toggleCollapse: () => {
-                model.collapsed = !model.collapsed;
             }
         },
 

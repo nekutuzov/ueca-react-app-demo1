@@ -76,12 +76,6 @@ function useTable<TRecord extends Record<string, unknown>>(params?: TableParams<
             __virtuozoComponents: undefined,
         },
 
-        events: {
-            onChangeColumns: () => {
-                _updateTableState();
-            },
-        },
-
         methods: {
             _tableHeaderView: () => {
                 const headerView = model.columns ?
@@ -189,6 +183,12 @@ function useTable<TRecord extends Record<string, unknown>>(params?: TableParams<
                 }
                 return <>{view}</>;
             }
+        },
+
+        events: {
+            onChangeColumns: () => {
+                _updateTableState();
+            },
         },
 
         constr: () => {

@@ -56,6 +56,12 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
             centered: false,
         },
 
+        methods: {
+            getTab: (tabId) => model.tabs?.find(t => t.getTabId() === tabId),
+
+            getTabIndex: (tabId) => model.tabs?.findIndex(t => t.getTabId() === tabId)
+        },
+
         events: {
             onChangeTabs: () => _initTabs(),
 
@@ -65,12 +71,6 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
                     model.selectedTab.selected = true;
                 }
             }
-        },
-
-        methods: {
-            getTab: (tabId) => model.tabs?.find(t => t.getTabId() === tabId),
-
-            getTabIndex: (tabId) => model.tabs?.findIndex(t => t.getTabId() === tabId)
         },
 
         init: () => _initTabs(),
