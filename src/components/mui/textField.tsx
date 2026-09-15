@@ -50,7 +50,7 @@ function useTextField(params?: TextFieldParams): TextFieldModel {
         events: {
             onInternalValidate: async () => {
                 if (model.required && !model.value) {
-                    return `${(model.labelView && UECA.isString(model.labelView)) || "This field"} cannot be empty`;
+                    return `${_fieldName()} cannot be empty`;
                 }
             },
 
@@ -66,7 +66,9 @@ function useTextField(params?: TextFieldParams): TextFieldModel {
                 placeholder={model.placeholder}
                 disabled={model.disabled}
                 error={model.error || !model.isValid()}
-                helperText={model.helperTextView}
+                // The validation message, while there is one, as Select shows its own. The field used
+                // to turn red with nothing to say why.
+                helperText={_helperText()}
                 variant={model.variant}
                 size={model.size}
                 type={model.type}
@@ -88,6 +90,17 @@ function useTextField(params?: TextFieldParams): TextFieldModel {
     return model;
 
     // Private methods
+    // The label when it is plain text, then the placeholder. It used to be
+    // `(labelView && isString(labelView)) || "This field"`, which is `true` for a text label, so a
+    // required "User Name" reported "true cannot be empty".
+    function _fieldName(): string {
+        return (UECA.isString(model.labelView) && model.labelView) || model.placeholder || "This field";
+    }
+
+    function _helperText(): React.ReactNode {
+        return model.isValid() ? model.helperTextView : model.getValidationError();
+    }
+
     function _convertInputValue(inputValue: string, inputType: string): string | number {
         switch (inputType) {
             case "number": {
