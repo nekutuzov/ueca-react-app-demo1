@@ -61,26 +61,40 @@ function useRouter(params?: RouterParams): RouterModel {
         events: {
             onChangeRoutes: () => {
                 model.__regExRoutes = undefined; // reset routes cache
-                if (model.route && !Reflect.has(model.routes, model.route.path)) {
+                if (model.route && !_hasRoute(model.route)) {
                     model.route = undefined
+                    return;
                 }
+                // A route the new table still has is drawn from the new table. The view used to be
+                // rebuilt only when the route changed, so a surviving route kept rendering the
+                // component of the table that was replaced.
+                _drawRoute();
             },
 
             onChangingRoute: (newRoute, oldRoute) => {
-                if (newRoute && Reflect.has(model.routes, newRoute.path)) {
+                if (newRoute && _hasRoute(newRoute)) {
                     return newRoute;
                 }
-                if (oldRoute && Reflect.has(model.routes, oldRoute.path)) {
+                if (oldRoute && _hasRoute(oldRoute)) {
                     return oldRoute;
                 }
                 return undefined;
             },
 
             onChangeRoute: () => {
-                const RouteView: RouteComp = model.routes[model.route.path];
-                model._currentView = RouteView(model.route.params);
-                //model._currentView = <RouteView p={model.route.params} />;
+                _drawRoute();
             }
+        },
+
+        // A route present at creation raised no change events — they are suppressed while a model
+        // initialises — so it was never vetted against the table and never drawn: the router showed
+        // nothing, or held a route it does not have. By mount the route has landed.
+        mount: () => {
+            if (model.route && !_hasRoute(model.route)) {
+                model.route = undefined;
+                return;
+            }
+            _drawRoute();
         },
 
         View: () => <>{model._currentView}</>
@@ -92,13 +106,26 @@ function useRouter(params?: RouterParams): RouterModel {
     return model;
 
     // Private methods
+    function _hasRoute(route: AnyRoute): boolean {
+        return !!model.routes && Reflect.has(model.routes, route.path);
+    }
+
+    function _drawRoute() {
+        if (!model.route || !model.routes) {
+            model._currentView = undefined;
+            return;
+        }
+        const RouteView: RouteComp = model.routes[model.route.path];
+        model._currentView = RouteView(model.route.params);
+    }
+
     function _prepareRegExRoutes() {
         if (model.__regExRoutes?.length > 0) {
             return;
         }
         const res: typeof model.__regExRoutes = [];
 
-        for (const r of Object.keys(model.routes)) {
+        for (const r of Object.keys(model.routes ?? {})) {
             let url = r;
             if (url.startsWith("//")) {
                 url = url.replace("//", _rootURLTag);
