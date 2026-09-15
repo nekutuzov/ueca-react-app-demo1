@@ -152,4 +152,4 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
 
 const TabsContainer = UECA.getFC(useTabsContainer);
 
-export { TabsContainerModel, useTabsContainer, TabsContainer };
+export { TabsContainerModel, TabsContainerParams, useTabsContainer, TabsContainer };
