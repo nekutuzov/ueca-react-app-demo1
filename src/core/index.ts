@@ -5,6 +5,7 @@ export * from "./infrastructure/appUI";
 export * from "./infrastructure/appRouter";
 export * from "./infrastructure/appRoutes";
 export * from "./infrastructure/appBrowsingHistory";
+export * from "./infrastructure/routeURL";
 export * from "./infrastructure/appTypes";
 export * from "./infrastructure/appSecurity";
 export * from "./infrastructure/appUtils";
