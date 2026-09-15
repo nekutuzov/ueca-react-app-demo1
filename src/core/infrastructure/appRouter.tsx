@@ -107,16 +107,17 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
 
     async function _setRouteParams(params: Record<string, unknown>, patch: boolean) {
         // Generic method to update route params for the current active layout's route
-        const route = UECA.clone(model._activeLayout.route as AnyRoute);
-        if (!route) {
+        const activeRoute = model._activeLayout?.route as AnyRoute;
+        if (!activeRoute) {
             return;
         }
+        const route = UECA.clone(activeRoute);
         if (patch) {
             route.params = { ...route.params, ...params };
         } else {
-            route.params = { ...params }; // TODO: unnecessery? remove?
+            route.params = { ...params };
         }
-        (model._activeLayout.route as AnyRoute).params = route.params;
+        activeRoute.params = route.params;
         await model.bus.unicast("App.BrowsingHistory.Replace", { path: route });
     }
 
@@ -134,16 +135,15 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
         const activePath = await model.bus.unicast("App.BrowsingHistory.GetActivePath");
         const otherLayoutRoute = model.otherLayout.lookupRoute(activePath);
         if (otherLayoutRoute) {
-            _changeRoute(otherLayoutRoute, true);
+            await _changeRoute(otherLayoutRoute, true);
             return;
         }
 
         const appLayoutRoute = model.appLayout.lookupRoute(activePath);
         if (appLayoutRoute) {
-            _changeRoute(appLayoutRoute, false);
-            return;
+            await _changeRoute(appLayoutRoute, false);
         } else {
-            _changeRoute(undefined, false);
+            await _changeRoute(undefined, false);
         }
     }
 
