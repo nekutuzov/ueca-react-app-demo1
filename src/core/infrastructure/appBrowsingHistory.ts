@@ -75,9 +75,12 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
                 if (_divertCrossOrigin(url)) {
                     return;
                 }
-                history.replaceState({ index: history.state.index }, "", url);
+                // A hash-only or externally pushed entry carries no index, so read it defensively
+                // and fall back to the one we are already on.
+                const index = history.state?.index ?? model.__currentHistoryIndex;
+                history.replaceState({ index }, "", url);
                 // history.state isn't ready yet due to async logic
-                runAsync(() => { model.__currentHistoryIndex = history.state.index });
+                runAsync(() => { model.__currentHistoryIndex = history.state?.index ?? index });
                 _syncCurrentPath();
             }
         },
@@ -152,6 +155,12 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
     }
 
     async function _browserNavigation() {
+        // Only entries this app pushed carry an index. A hash-only navigation, or one pushed from
+        // outside the app, lands here unstamped - adopt the index we are already on, the same
+        // repair syncWithBrowser() makes at load, rather than reading `index` off null.
+        if (!history.state) {
+            history.replaceState({ index: model.__currentHistoryIndex }, "", window.location.href);
+        }
         const state_index = history.state.index;
         if (model.__currentHistoryIndex === state_index) {
             let path = window.location.pathname.substring(model.__baseURL.length);
@@ -170,7 +179,16 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             _syncCurrentPath();
         } else {
             const rollbackDelta = model.__currentHistoryIndex - state_index;
-            history.go(rollbackDelta);
+            if (rollbackDelta !== 0) {
+                history.go(rollbackDelta);
+            } else {
+                // No distance to travel back, which is always the case for an entry that arrived
+                // without an index of its own (stamped with the current one above). history.go(0)
+                // would reload the page and discard the very unsaved state the veto protects, so
+                // restore the URL in place instead.
+                const restored = new URL(model.__baseURL + model.__activePath, window.location.origin);
+                history.replaceState({ index: model.__currentHistoryIndex }, "", restored.href);
+            }
         }
     }
 
