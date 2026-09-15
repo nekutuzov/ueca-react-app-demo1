@@ -43,8 +43,6 @@ type ChartScreenStruct = RouteScreenBaseStruct<{
         _renderChartPreview: () => React.JSX.Element;
         _renderChartSettings: () => React.JSX.Element;
     };
-
-    modelsToValidate: () => (TextFieldModel | SelectModel)[];
 }>;
 
 type ChartScreenParams = RouteScreenBaseParams<ChartScreenStruct>;
@@ -55,6 +53,10 @@ function useChartScreen(params?: ChartScreenParams): ChartScreenModel {
         props: {
             id: useChartScreen.name,
             chart: undefined,
+            // A prop, as in UserScreen. Declared beside the struct's sections instead, it was not a
+            // prop at all: UECA never read it, validate() checked nothing, and a chart with an empty
+            // required title was saved.
+            modelsToValidate: () => [model.titleField, model.typeField],
         },
 
         children: {
@@ -315,8 +317,6 @@ function useChartScreen(params?: ChartScreenParams): ChartScreenModel {
                 </Row>
             ),
         },
-
-        modelsToValidate: () => [model.titleField, model.typeField],
 
         init: async () => {
             await model.crudScreen.refresh();

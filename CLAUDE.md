@@ -153,6 +153,10 @@ Every component extends one of these, in `src/components/base/`:
 5. Keep `View` structural; move algorithmic logic into module-level `_privateFunctions`.
 6. Don't supply `|| default` fallbacks for wrapped-component props — let the component own its
    defaults. Exceptions: user-facing placeholder text, business logic that needs a guaranteed value.
+7. A struct literal holds only its sections, in this order: `props`, `children`, `methods`,
+   `events`, `messages`, the lifecycle hooks as they run, `View`. **Any other key is silently
+   ignored** — `ChartScreen` once declared `modelsToValidate` beside `props` instead of in it, and a
+   chart with an empty required title saved without a word.
 
 ### Layout primitives
 
