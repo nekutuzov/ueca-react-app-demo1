@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as UECA from "ueca-react";
 import { UIBaseModel, UIBaseParams, UIBaseStruct, useUIBase } from "@components";
 import { AppURL } from "@core";
@@ -7,6 +8,10 @@ type RouterStruct = UIBaseStruct<{
         routes: Routing;
         route: AnyRoute;
         _currentView: React.ReactNode;
+        // The routeKey of the route _currentView was drawn for. Taken when the view is drawn rather
+        // than read from the live route, so params patched in place (AppRouter's SetRouteParams, as an
+        // editor does when its new record gets an id) update the screen instead of rebuilding it.
+        _currentViewKey: string;
         __regExRoutes: { regExPath: RegExp, path: string, params: Record<string, unknown>; component: RouteComp }[];
     },
 
@@ -27,6 +32,26 @@ type Route<R extends Routing> = {
 
 type AnyRoute = Route<Routing>;
 
+// Canonical route identity: ":seg" path tokens are substituted with their values, query (?:...)
+// params are ignored. Two routes are "the same screen" only when these keys match — so a different
+// path-segment param (/users/1 vs /users/2) is a DIFFERENT screen, and its view is remounted, while a
+// query-only change keeps the screen mounted and just patches its params.
+function routeKey(route: AnyRoute): string {
+    if (!route) {
+        return "";
+    }
+    const path = route.path.split("?")[0]; // drop the query pattern; query params don't affect screen identity
+    // Tokens are substituted after the scheme and host only. Matched over the whole address, the
+    // pattern read a port or a mailto: scheme as a ":param" and deleted it: https://host:8443/guide
+    // keyed as https://host/guide, and every mailto: route keyed as "mailto".
+    const origin = path.match(ROUTE_ORIGIN)?.[0] ?? "";
+    return origin + path.slice(origin.length).replace(/:([^/?]+)/g, (_m, name) => String(route.params?.[name] ?? ""));
+}
+
+// The scheme and host that start an absolute route ("https://host:8443", "mailto:"), where a colon is
+// not a token.
+const ROUTE_ORIGIN = /^[a-z][a-z\d+.-]*:(?:\/\/[^/?#]*)?/i;
+
 type RouterParams = UIBaseParams<RouterStruct>;
 type RouterModel = UIBaseModel<RouterStruct>;
 
@@ -36,7 +61,8 @@ function useRouter(params?: RouterParams): RouterModel {
             id: useRouter.name,
             routes: undefined,
             route: undefined,
-            _currentView: undefined
+            _currentView: undefined,
+            _currentViewKey: undefined
         },
 
         methods: {
@@ -97,7 +123,11 @@ function useRouter(params?: RouterParams): RouterModel {
             _drawRoute();
         },
 
-        View: () => <>{model._currentView}</>
+        // Keyed by the drawn route's identity: a route to a different screen (a new path parameter)
+        // remounts the view, so it starts from fresh DOM and component state. Unkeyed, React kept the
+        // element of the same screen type and id. The screen's cached model is kept either way, and
+        // `init` does not run again: a record screen loads the new record in onChangeRouteParams.
+        View: () => <React.Fragment key={model._currentViewKey}>{model._currentView}</React.Fragment>
     }
 
     const _rootURLTag = "/841408C0-C813-4CE9-9CD4-56968B735962/"; // Fake URL base for routes replacing the base. See routes starting with "//"
@@ -113,9 +143,11 @@ function useRouter(params?: RouterParams): RouterModel {
     function _drawRoute() {
         if (!model.route || !model.routes) {
             model._currentView = undefined;
+            model._currentViewKey = undefined;
             return;
         }
         const RouteView: RouteComp = model.routes[model.route.path];
+        model._currentViewKey = routeKey(model.route);
         model._currentView = RouteView(model.route.params);
     }
 
@@ -217,4 +249,4 @@ function useRouter(params?: RouterParams): RouterModel {
 
 const Router = UECA.getFC(useRouter);
 
-export { Routing, Route, AnyRoute, RouterModel, useRouter, Router }
+export { Routing, Route, AnyRoute, RouterModel, RouterParams, useRouter, Router, routeKey }
