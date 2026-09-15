@@ -3,7 +3,7 @@ import {
     ButtonModel, Col, EditBaseModel, IconButtonModel, UIBaseModel, UIBaseParams, UIBaseStruct, useButton, useIconButton,
     useUIBase, useValidator
 } from "@components";
-import { AppRoute, asyncSafe } from "@core";
+import { AppRoute, asyncSafe, runAsync } from "@core";
 import { Breadcrumb, ScreenLayoutModel, useScreenLayout } from "@screens";
 
 type CRUDScreenStruct = UIBaseStruct<{
@@ -260,14 +260,10 @@ function useCRUDScreen(params?: CRUDScreenParams): CRUDScreenModel {
                     route = model.breadcrumbs[model.breadcrumbs.length - 2].route;
                 }
 
-                // Use timeout to allow the current navigation to complete before navigating to the parent screen                    
-                setTimeout(async () => {
-                    if (redirect) {
-                        await model.setRoute(route);
-                    } else {
-                        await model.goToRoute(route);
-                    }
-                });
+                // Deferred, to let the current navigation complete before navigating to the parent
+                // screen. Through runAsync rather than a bare setTimeout, so a navigation that fails
+                // is reported instead of escaping as an unhandled rejection.
+                runAsync(() => redirect ? model.setRoute(route) : model.goToRoute(route));
             },
 
             _toolsView: () =>
