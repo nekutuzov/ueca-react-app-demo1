@@ -39,6 +39,10 @@ function useSpinner(params?: SpinnerParams): SpinnerModel {
             onChangeVisible: () => _updateState()
         },
 
+        // onChangeVisible never fires for the value a spinner is created with, so a spinner
+        // created visible stayed hidden until `visible` changed.
+        init: () => _updateState(),
+
         View: () =>
             <Drape
                 id={model.htmlId()}
