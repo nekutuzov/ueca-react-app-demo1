@@ -12,6 +12,9 @@ type NavItemStruct = UIBaseStruct<{
         newTab: boolean;
         icon: React.ReactNode;
         text: string;
+        // Shows the icon without the text, as a collapsed menu does. The text still names the link
+        // (it is the link's title), so hiding it does not leave the link nameless.
+        iconOnly: boolean;
     },
 
     children: {
@@ -37,6 +40,7 @@ function useNavItem(params?: NavItemParams): NavItemModel {
             newTab: UECA.bind(() => model.navLink, "newTab"),
             icon: undefined,
             text: undefined,
+            iconOnly: false,
         },
 
         children: {
@@ -85,7 +89,7 @@ function useNavItem(params?: NavItemParams): NavItemModel {
                     }}
                 >
                     {model.icon && <ListItemIcon>{model.icon}</ListItemIcon>}
-                    {model.text && <ListItemText primary={model.text} />}
+                    {model.text && !model.iconOnly && <ListItemText primary={model.text} />}
                 </ListItemButton>
             )
         },

@@ -8,7 +8,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import MessageIcon from '@mui/icons-material/Message';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import { Col, UIBaseModel, UIBaseParams, UIBaseStruct, useUIBase, NavItemModel, useNavItem } from "@components";
-import { AppRoute } from "@core";
+import { AppRoute, ScreenRoute } from "@core";
 import { List } from "@mui/material";
 
 type AppMenuStruct = UIBaseStruct<{
@@ -39,68 +39,14 @@ function useAppMenu(params?: AppMenuParams): AppMenuModel {
         },
 
         children: {
-            homeMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Home",
-                icon: <HomeRoundedIcon />,
-                route: { path: "/home" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            toolbarMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Toolbar",
-                icon: <BuildIcon />,
-                route: { path: "/toolbar" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-            bindingsMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Bindings",
-                icon: <LinkIcon />,
-                route: { path: "/bindings" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            messageBusMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Message Bus",
-                icon: <MessageIcon />,
-                route: { path: "/messagebus" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            autoEventsMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Auto Events",
-                icon: <FlashOnIcon />,
-                route: { path: "/autoevents" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            dashboardMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Dashboard",
-                icon: <AnalyticsRoundedIcon />,
-                route: { path: "/dashboard" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            usersMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Users",
-                icon: <GroupIcon />,
-                route: { path: "/users" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
-
-            chartsMenuItem: useNavItem({
-                text: () => model.collapsed ? undefined : "Charts",
-                icon: <BarChartIcon />,
-                route: { path: "/charts" },
-                kind: "list-item",
-                extent: { height: 48 }
-            }),
+            homeMenuItem: useMenuItem("Home", <HomeRoundedIcon />, "/home"),
+            toolbarMenuItem: useMenuItem("Toolbar", <BuildIcon />, "/toolbar"),
+            bindingsMenuItem: useMenuItem("Bindings", <LinkIcon />, "/bindings"),
+            messageBusMenuItem: useMenuItem("Message Bus", <MessageIcon />, "/messagebus"),
+            autoEventsMenuItem: useMenuItem("Auto Events", <FlashOnIcon />, "/autoevents"),
+            dashboardMenuItem: useMenuItem("Dashboard", <AnalyticsRoundedIcon />, "/dashboard"),
+            usersMenuItem: useMenuItem("Users", <GroupIcon />, "/users"),
+            chartsMenuItem: useMenuItem("Charts", <BarChartIcon />, "/charts"),
         },
 
         messages: {
@@ -129,6 +75,19 @@ function useAppMenu(params?: AppMenuParams): AppMenuModel {
 
     const model = useUIBase(struct, params);
     return model;
+
+    // A menu entry. The text is always given: a collapsed menu hides it with iconOnly rather than by
+    // dropping it, which left every collapsed link with no name for a screen reader or a hover hint.
+    function useMenuItem(text: string, icon: React.ReactNode, path: ScreenRoute["path"]): NavItemModel {
+        return useNavItem({
+            text: text,
+            iconOnly: () => model.collapsed,
+            icon: icon,
+            route: { path },
+            kind: "list-item",
+            extent: { height: 48 }
+        });
+    }
 
     // Private methods
     function _syncActiveMenu(route: AppRoute) {
