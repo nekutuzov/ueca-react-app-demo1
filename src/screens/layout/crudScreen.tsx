@@ -108,6 +108,7 @@ function useCRUDScreen(params?: CRUDScreenParams): CRUDScreenModel {
 
             cancelButton: useIconButton({
                 kind: "cancel",
+                title: "Cancel changes",
                 size: "large",
                 disabled: () => !model._state.dataModified || model._state.dataSaving || model.readonly,
                 onClick: () => model.cancel()
@@ -115,6 +116,7 @@ function useCRUDScreen(params?: CRUDScreenParams): CRUDScreenModel {
 
             deleteButton: useIconButton({
                 kind: "delete",
+                title: "Delete",
                 size: "large",
                 disabled: () => _isDeleteDisabled(),
                 onClick: () => model.delete()
@@ -122,6 +124,7 @@ function useCRUDScreen(params?: CRUDScreenParams): CRUDScreenModel {
 
             refreshButton: useIconButton({
                 kind: "refresh",
+                title: "Refresh",
                 size: "large",
                 disabled: () => {
                     return model._state.dataNew ||
@@ -134,6 +137,7 @@ function useCRUDScreen(params?: CRUDScreenParams): CRUDScreenModel {
 
             saveButton: useIconButton({
                 kind: "ok",
+                title: "Save",
                 size: "large",
                 disabled: () => !model._state.dataModified || model._state.dataSaving || model.readonly,
                 onClick: () => model.save()

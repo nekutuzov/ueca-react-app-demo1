@@ -73,7 +73,7 @@ function useDialog(params?: DialogParams): DialogModel {
                         <div>
                             {model.titleView}
                         </div>
-                        <CloseIconButton onClick={_close} />
+                        <CloseIconButton title="Close" onClick={_close} />
                     </Row>
                 </DialogTitle>
                 <DialogContent>

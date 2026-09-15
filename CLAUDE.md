@@ -157,6 +157,7 @@ Every component extends one of these, in `src/components/base/`:
    `events`, `messages`, the lifecycle hooks as they run, `View`. **Any other key is silently
    ignored** — `ChartScreen` once declared `modelsToValidate` beside `props` instead of in it, and a
    chart with an empty required title saved without a word.
+8. An icon-only control needs words: `IconButton` takes `title` (its accessible name and hover hint).
 
 ### Layout primitives
 

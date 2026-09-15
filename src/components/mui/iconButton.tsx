@@ -14,6 +14,9 @@ type IconButtonStruct = MuiBaseStruct<{
     props: {
         kind?: keyof typeof buttonTypes;
         iconView: React.ReactNode;
+        // What the button does, in words. An icon alone names nothing: without it a screen reader
+        // announced just "button". Also shown as the browser's hint on hover.
+        title: string;
         color: "inherit" | "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning";
         disabled: boolean;
         size: "small" | "medium" | "large";
@@ -37,6 +40,7 @@ function useIconButton(params?: IconButtonParams): IconButtonModel {
             id: useIconButton.name,
             kind: "ok",
             iconView: undefined,
+            title: undefined,
             color: "default",
             disabled: false,
             size: "medium",
@@ -51,6 +55,8 @@ function useIconButton(params?: IconButtonParams): IconButtonModel {
         View: () => (
             <MUIIconButton
                 id={model.htmlId()}
+                aria-label={model.title}
+                title={model.title}
                 color={model.color}
                 disabled={model.disabled}
                 size={model.size}

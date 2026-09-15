@@ -70,7 +70,7 @@ function useDrawer(params?: DrawerParams): DrawerModel {
                     <Row verticalAlign={"center"} horizontalAlign={"spaceBetween"}>
                         <DialogTitle children={model.titleView} />
                         <Block render={model.variant != "permanent"}>
-                            <CloseIconButton onClick={_close} />
+                            <CloseIconButton title="Close" onClick={_close} />
                         </Block>
                     </Row>
                     <DialogContent style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
