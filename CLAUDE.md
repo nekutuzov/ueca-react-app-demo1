@@ -229,6 +229,10 @@ The app is served under a base path, and `index.html` sets `<base href="/ueca-re
 Asset references in `index.html` must be **relative** (`href="ueca.ico"`) so they resolve against it
 in dev and on GitHub Pages alike.
 
+The light/dark mode is stored under `ueca-demo1-theme-mode` by `appThemeManager.tsx`, and an inline
+script in `index.html` reads the same key to paint the page before the bundle loads. Change the key or
+the default in both places.
+
 **API mocking**: MSW handlers in `src/api/mocks/handlers.ts`, fixtures in `src/api/mocks/*.json`,
 worker at `public/mockServiceWorker.js`. Disable by removing the `await initMocks()` call in
 `src/main.tsx`.

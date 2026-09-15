@@ -8,6 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UECA-React Application Demo</title>
   <base href="/ueca-react-app-demo1/" />
+  <script>
+    // Paint the page in the theme mode the app starts in, before the bundle loads. Without it every
+    // reload showed a white page until MUI's CssBaseline arrived - after the mock API worker has
+    // started. The html element's background only shows until the body is painted, so it never
+    // competes with the theme. Keep the key and the default in step with appThemeManager.tsx; the
+    // colours are MUI's default palette.background.default.
+    (function () {
+      var mode;
+      try {
+        mode = localStorage.getItem("ueca-demo1-theme-mode");
+      } catch (e) { /* private browsing or blocked site data */ }
+      document.documentElement.style.background = mode === "light" ? "#ffffff" : "#121212";
+    })();
+  </script>
   <style>
     html,
     body {
