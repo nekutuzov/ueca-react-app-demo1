@@ -61,7 +61,10 @@ function useTextField(params?: TextFieldParams): TextFieldModel {
         View: () => (
             <MUITextField
                 id={model.htmlId()}
-                value={model.value}
+                // Never undefined: value={undefined} makes React treat the input as uncontrolled — it
+                // warned as soon as a keystroke gave the field a value, and a field whose value was
+                // unset again kept showing the text it last had.
+                value={model.value ?? ""}
                 label={model.labelView}
                 multiline={model.multiline}
                 placeholder={model.placeholder}

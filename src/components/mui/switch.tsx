@@ -49,7 +49,10 @@ function useSwitch(params?: SwitchParams): SwitchModel {
             _switchView: () => (
                 <MUISwitch
                     id={!model.labelView ? model.htmlId() : undefined}
-                    checked={model.checked}
+                    // Always a boolean, as a switch is always on or off: checked={undefined}
+                    // makes React treat it as uncontrolled, and it would keep the state it
+                    // last showed while the value is unset.
+                    checked={!!model.checked}
                     color={model.color}
                     disabled={model.disabled}
                     size={model.size}

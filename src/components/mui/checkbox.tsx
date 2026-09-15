@@ -46,7 +46,10 @@ function useCheckbox(params?: CheckboxParams): CheckboxModel {
             _checkBoxView: () => (
                 <MUICheckbox
                     id={!model.labelView ? model.htmlId() : undefined}
-                    checked={model.checked}
+                    // Always a boolean: checked={undefined} makes React treat the box as
+                    // uncontrolled, and it would keep the state it last showed while the
+                    // value is unset (a record field not loaded yet, or sent as null).
+                    checked={!!model.checked}
                     disabled={model.disabled}
                     size={model.size}
                     onChange={model.toggle}
