@@ -59,7 +59,7 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
                 // "/home" opened at the origin root, outside the app.
                 const url = routeToURL(UECA.isObject(route) ? route : { path: route }, model.__baseURL);
                 if (newTab) {
-                    window.open(url, "_blank");
+                    _openInNewTab(url);
                     return;
                 }
                 await _navigate(url);
@@ -69,6 +69,9 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
                 // Resolved like Open's. Used as it was, an app-relative string went into the address
                 // as it was, which put it at the origin root, outside the app.
                 const url = routeToURL(UECA.isObject(route) ? route : { path: route }, model.__baseURL);
+                if (_divertCrossOrigin(url)) {
+                    return;
+                }
                 history.replaceState({ index: history.state.index }, "", url);
                 // history.state isn't ready yet due to async logic
                 runAsync(() => { model.__currentHistoryIndex = history.state.index });
@@ -126,6 +129,25 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
         window.document.title = path ? `${model.__appTitle}: ${path}` : model.__appTitle;
     }
 
+    // noopener closes the reverse-tabnabbing hole: without it the opened page gets a live
+    // window.opener and can navigate this one. Unlike <a target="_blank">, window.open does not
+    // imply it. Passing only these two features still yields a tab rather than a popup.
+    function _openInNewTab(url: string) {
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    // Cross-site history is prohibited: neither pushState nor replaceState can move the document
+    // to another origin - they throw a SecurityError - so a foreign URL always becomes a new tab.
+    // Returns true when it took the navigation.
+    function _divertCrossOrigin(url: string): boolean {
+        // "" is what an empty route resolves to, and means "the current URL" to both history calls.
+        if (!url || new URL(url).origin === window.location.origin) {
+            return false;
+        }
+        _openInNewTab(url);
+        return true;
+    }
+
     async function _browserNavigation() {
         const state_index = history.state.index;
         if (model.__currentHistoryIndex === state_index) {
@@ -154,18 +176,18 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
             return;
         }
 
-        if (new URL(url).origin !== window.location.origin) {
-            window.open(url, "_blank"); // Cross-site history is prohibited. Always open a new tab.
-        } else {
-            model.__currentHistoryIndex = history.length;
-            history.pushState({ index: model.__currentHistoryIndex }, "", url);
-            if (history.length - model.__currentHistoryIndex === 1) {
-                // History was truncated or abnormally changes by the browser. Synchronize the state.
-                model.__currentHistoryIndex = history.length - 1;
-                history.replaceState({ index: model.__currentHistoryIndex }, "", url);
-            }
-            _syncCurrentPath();
+        if (_divertCrossOrigin(url)) {
+            return;
         }
+
+        model.__currentHistoryIndex = history.length;
+        history.pushState({ index: model.__currentHistoryIndex }, "", url);
+        if (history.length - model.__currentHistoryIndex === 1) {
+            // History was truncated or abnormally changes by the browser. Synchronize the state.
+            model.__currentHistoryIndex = history.length - 1;
+            history.replaceState({ index: model.__currentHistoryIndex }, "", url);
+        }
+        _syncCurrentPath();
     }
 }
 
