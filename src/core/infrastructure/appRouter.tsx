@@ -123,7 +123,9 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
     async function _onNavigateBrowsingHistory(path: string) {
         const route = model.appLayout.lookupRoute(path) || model.otherLayout.lookupRoute(path);
         if (!route) {
-            await _changeRoute(undefined, true);
+            // Return, rather than falling through to navigate a second time: the default-screen
+            // fallback inside _changeRoute has already handled an unknown path.
+            return await _changeRoute(undefined, true);
         }
         return await _changeRoute(route, true);
     }
