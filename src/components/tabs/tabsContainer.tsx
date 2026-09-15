@@ -77,6 +77,13 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
                 if (model.selectedTab) {
                     model.selectedTab.selected = true;
                 }
+                // Raised for every selection change, a click included. A tab is selected by its own
+                // click handler: MUI Tabs hands its onChange to its children by cloning them, and the
+                // children here are the tabs' UECA views, which do not pass it on to the MUI Tab — so
+                // an onChange raised only from MUI's handler was never raised at all.
+                if (model.onChange) {
+                    asyncSafe(() => model.onChange(model));
+                }
             }
         },
 
@@ -85,15 +92,14 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
         View: () => {
             const tabs = <>
                 <MUITabs
+                    // An index: the children are the tabs' views, which carry no `value`, so MUI
+                    // numbers them by position — and positions the indicator by the same number.
                     value={model.selectedTabIndex}
                     orientation={model.orientation}
                     variant={model.variant}
                     scrollButtons={model.scrollButtons}
                     centered={model.centered}
-                    onChange={(_, newValue) => {
-                        model.selectedTabIndex = newValue;
-                        if (model.onChange) asyncSafe(() => model.onChange(model));
-                    }}
+                    onChange={(_, newValue) => { model.selectedTabIndex = newValue; }}
                 >
                     {model.tabs?.map(t => <t.View key={t.getTabId()} />)}
                 </MUITabs>

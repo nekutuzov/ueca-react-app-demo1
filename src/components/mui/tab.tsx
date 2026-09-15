@@ -57,6 +57,12 @@ function useTab(params?: TabParams): TabModel {
                     id={model.htmlId()}
                     label={model.labelView}
                     value={model.getTabId()}
+                    // `selected` comes from the container, which keeps it in step with its selection.
+                    // MUI Tabs would pass it by cloning its children, but this tab's UECA view is the
+                    // child, not the MUI Tab — without it no tab was ever aria-selected, styled as
+                    // selected, or reachable by Tab (MUI gives an unselected tab tabIndex -1). It is
+                    // not in TabProps' public type, hence the spread.
+                    {...{ selected: model.selected }}
                     disabled={model.disabled}
                     icon={model.iconView}
                     iconPosition={model.iconPosition}
