@@ -7,7 +7,7 @@ import {
     FormHelperText,
     SelectProps
 } from "@mui/material";
-import { MuiEditBaseModel, MuiEditBaseParams, MuiEditBaseStruct, useMuiEditBase } from "@components";
+import { isEmptyValue, MuiEditBaseModel, MuiEditBaseParams, MuiEditBaseStruct, useMuiEditBase } from "@components";
 import { asyncSafe } from "@core";
 
 type SelectOption = {
@@ -55,7 +55,8 @@ function useSelect(params?: SelectParams): SelectModel {
 
         events: {
             onInternalValidate: async () => {
-                if (model.required && !model.value) {
+                // Not `!model.value`: an option whose value is 0 is a choice, and shows as chosen.
+                if (model.required && isEmptyValue(model.value)) {
                     return `${UECA.isString(model.labelView) ? model.labelView : "This field"} cannot be empty`;
                 }
             },

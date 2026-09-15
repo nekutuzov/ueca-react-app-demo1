@@ -1,6 +1,6 @@
 import * as UECA from "ueca-react";
 import { TextField as MUITextField, TextFieldProps } from "@mui/material";
-import { MuiEditBaseModel, MuiEditBaseParams, MuiEditBaseStruct, useMuiEditBase } from "@components";
+import { isEmptyValue, MuiEditBaseModel, MuiEditBaseParams, MuiEditBaseStruct, useMuiEditBase } from "@components";
 import { asyncSafe } from "@core";
 
 // TextField component
@@ -49,7 +49,8 @@ function useTextField(params?: TextFieldParams): TextFieldModel {
 
         events: {
             onInternalValidate: async () => {
-                if (model.required && !model.value) {
+                // Not `!model.value`: a TextField holding the number 0 shows "0", which is a value.
+                if (model.required && isEmptyValue(model.value)) {
                     return `${_fieldName()} cannot be empty`;
                 }
             },
