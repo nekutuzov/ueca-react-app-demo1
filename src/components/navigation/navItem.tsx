@@ -53,9 +53,15 @@ function useNavItem(params?: NavItemParams): NavItemModel {
             })
         },
 
+        // The link around these is the control: it takes the focus and the click. The MUI button
+        // inside is only its look, so it is neither focusable nor a button of its own — it used to be
+        // both, which gave every item a second tab stop and put a button inside a link.
         methods: {
             _linkView: () => model.kind === "button" ? (
                 <IconButton
+                    component={"span"}
+                    role={undefined}
+                    tabIndex={-1}
                     size="small"
                     color={model.active ? "primary" : "default"}
                     disabled={model.disabled}
@@ -65,9 +71,18 @@ function useNavItem(params?: NavItemParams): NavItemModel {
                 </IconButton>
             ) : (
                 <ListItemButton
+                    role={undefined}
+                    tabIndex={-1}
                     selected={model.active}
                     disabled={model.disabled}
-                    sx={{ height: model.extent?.height, width: model.extent?.width }}
+                    sx={{
+                        height: model.extent?.height,
+                        width: model.extent?.width,
+                        // Keyboard focus is on the link around the item, so the item wears it the way
+                        // MUI marks its own focus. The browser's ring on an inline link around a
+                        // block is barely visible.
+                        "a:focus-visible > &": { backgroundColor: "action.focus" }
+                    }}
                 >
                     {model.icon && <ListItemIcon>{model.icon}</ListItemIcon>}
                     {model.text && <ListItemText primary={model.text} />}
