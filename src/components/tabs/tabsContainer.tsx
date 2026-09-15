@@ -134,7 +134,11 @@ function useTabsContainer(params?: TabsContainerParams): TabsContainerModel {
             model.selectedTab = model.getTab(defaultTabId);
         }
 
-        if (model.selectedTabIndex === -1) {
+        // Fall back to the first tab when nothing is selected, or when the selected tab is no longer
+        // among the tabs. Tested against the list directly: selectedTabIndex reads a binding that has
+        // not necessarily settled at this point, which left a removed tab selected and its content on
+        // screen.
+        if (!model.selectedTab || !model.tabs?.includes(model.selectedTab)) {
             model.selectedTab = model.tabs?.length ? model.tabs[0] : undefined;
         }
     }
