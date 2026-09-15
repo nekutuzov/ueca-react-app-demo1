@@ -6,6 +6,8 @@ import { DetailedError } from "@core";
 type AppDialogManagerStruct = UIBaseStruct<{
     props: {
         _openDialogs: UECA.ReactElement[];
+        // Numbers each dialog, for the React key that gives it a model of its own.
+        __dialogCount: number;
     }
 }>;
 
@@ -18,7 +20,8 @@ function useAppDialogManager(params?: AppDialogManagerParams): AppDialogManagerM
     const struct: AppDialogManagerStruct = {
         props: {
             id: useAppDialogManager.name,
-            _openDialogs: []
+            _openDialogs: [],
+            __dialogCount: 0
         },
 
         messages: {
@@ -48,8 +51,16 @@ function useAppDialogManager(params?: AppDialogManagerParams): AppDialogManagerM
             }
         });
 
+        // Every dialog shows as "activeDialog", so the key and cacheable={false} are what give each
+        // one a model of its own. Sharing the cached one, a dialog took over the model of the dialog
+        // before it, whose `init` — where an action confirmation names its OK button — never ran
+        // again: after one "Delete" confirmation, every later confirmation offered "Delete" as its
+        // answer. Uncached, a dialog brought back when the one above it closes starts from its own
+        // parameters again.
         const newDialog = (
             <AlertDialog
+                key={++model.__dialogCount}
+                cacheable={false}
                 id={"activeDialog"}
                 titleView={title}
                 contentView={message}

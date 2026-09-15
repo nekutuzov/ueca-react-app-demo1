@@ -190,6 +190,9 @@ native MUI prop. Declare `ReactElement` props as `[PropertyName]View`. Follow
   — a path parameter without a value throws), `resolveRouteURL` is total (hrefs). `NavLink` renders
   the real URL from `App.Router.ResolveRoute`, so middle-click, Ctrl+click and "copy link" work, while
   a plain click still navigates in the app. An address on another origin always opens a new tab.
+- `AppDialogManager` renders every dialog in one place under one id, so each gets a `key` and
+  `cacheable={false}`. Without them a dialog inherited the model of the one before it — its OK button
+  kept reading "Delete" after a delete confirmation.
 - API: service clients are ordinary components with `messages:` handlers and no view
   (`src/api/demoServiceApiClient.tsx`). Screens reach them over the bus, never by import.
 - Errors: `UECA.globalSettings.errorHandler` catches everything (set in `appStart.tsx`), so
