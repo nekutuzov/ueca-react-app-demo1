@@ -98,10 +98,16 @@ class RestApiClient implements IRestApiClient {
         const dynamicParamExpression: RegExp = new RegExp(/:([^:/]*)/, "g");
         const updatedUrl = url?.replace(dynamicParamExpression, param => {
             const paramName = param.slice(1);
-            if (Object.prototype.hasOwnProperty.call(updatedParams, paramName)) {
+            // A value, not merely a key: undefined and null are as missing as an absent key. Checked
+            // for the key alone, they went into the path as the text "undefined" or "null", and the
+            // request went to /users/undefined instead of failing.
+            if (updatedParams[paramName] != null) {
                 const parameter = updatedParams[paramName];
                 delete updatedParams[paramName];
-                return (typeof parameter === "string") ? parameter : JSON.stringify(parameter);
+                // Encoded, so the value stays one path segment. Spliced in as it was, a "?" started the
+                // query (which the search assignment then overwrote) and a "/" or "#" moved the
+                // request somewhere else: "what?.txt" requested /files/what.
+                return encodeURIComponent((typeof parameter === "string") ? parameter : JSON.stringify(parameter));
             } else {
                 throw new Error(`Parameter "${paramName}" not found. URL: ${url}`);
             }
