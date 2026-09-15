@@ -139,7 +139,8 @@ Every component extends one of these, in `src/components/base/`:
 
 `useBase` gives every model shorthand methods over the bus — `goToRoute`, `resolveRoute`,
 `dialogWarning`, `dialogConfirmDelete`, `alertSuccess`, `setAppBusy`, `selectFiles`,
-`runWithErrorDisplay`, `runWithBusyDisplay`. **Prefer these over hand-written `bus.unicast` calls.**
+`runWithErrorDisplay`, `runWithBusyDisplay`, `copyToClipboard`. **Prefer these over hand-written
+`bus.unicast` calls.**
 
 ### Component file rules
 

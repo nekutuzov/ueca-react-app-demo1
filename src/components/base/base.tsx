@@ -84,6 +84,9 @@ function useBase<T extends BasePartialStruct>(extStruct: T, params?: BaseParams<
             // ran with undefined.
             runWithErrorDisplay: async (action, params) => await _runWithErrorDisplay(action, params),
             runWithBusyDisplay: async (action) => await _runWithBusyDisplay(action),
+            // Declared above but never implemented, so a call threw "is not a function". Requires a
+            // secure context (https or localhost) and a focused document.
+            copyToClipboard: async (content) => await navigator.clipboard.writeText(content),
             selectFiles: async (fileMask, multiselect) => await model.bus.unicast("App.SelectFiles", { fileMask, multiselect }),
         }
     }
