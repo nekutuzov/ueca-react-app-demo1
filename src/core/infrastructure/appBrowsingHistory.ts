@@ -1,9 +1,9 @@
 import * as UECA from "ueca-react";
 import { AnyRoute, BaseModel, BaseParams, BaseStruct, useBase } from "@components";
 import { asyncSafe, runAsync } from "@core";
-// Navigation resolves routes through routeURL.ts. It used to keep a private copy of the rules, which
-// threw a TypeError for a null parameter and decoded a query value twice.
-import { routeToURL } from "./routeURL";
+// Navigation and ResolveRoute resolve through the same rules. Navigation used to keep a private copy
+// of them, which threw a TypeError for a null parameter and decoded a query value twice.
+import { resolveRouteURL, routeToURL } from "./routeURL";
 
 type AppBrowsingHistoryStruct = BaseStruct<{
     props: {
@@ -98,7 +98,12 @@ function useAppBrowsingHistory(params?: BaseParams<AppBrowsingHistoryStruct>): A
 
             "App.BrowsingHistory.Open": async (p) => await model.open(p.path, p.newTab),
 
-            "App.BrowsingHistory.Replace": async (p) => await model.replace(p.path)
+            "App.BrowsingHistory.Replace": async (p) => await model.replace(p.path),
+
+            // The URL a route would navigate to, for a link's href. Total, unlike the strict
+            // resolution navigation uses: an unresolvable route yields undefined, so a link renders
+            // without an href instead of raising.
+            "App.BrowsingHistory.ResolveRoute": async (route) => resolveRouteURL(route, model.__baseURL)
         },
 
         // The active path is derived from window.location alone, so it is established here, in the

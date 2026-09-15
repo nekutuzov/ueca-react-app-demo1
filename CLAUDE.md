@@ -137,8 +137,8 @@ Every component extends one of these, in `src/components/base/`:
 | `MuiEditBaseModel` / `useMuiEditBase` | MUI form controls |
 | `RouteScreenBaseModel` / `useRouteScreenBase` | screen-level components with routing |
 
-`useBase` gives every model shorthand methods over the bus — `goToRoute`, `dialogWarning`,
-`dialogConfirmDelete`, `alertSuccess`, `setAppBusy`, `selectFiles`,
+`useBase` gives every model shorthand methods over the bus — `goToRoute`, `resolveRoute`,
+`dialogWarning`, `dialogConfirmDelete`, `alertSuccess`, `setAppBusy`, `selectFiles`,
 `runWithErrorDisplay`, `runWithBusyDisplay`. **Prefer these over hand-written `bus.unicast` calls.**
 
 ### Component file rules
@@ -185,6 +185,10 @@ native MUI prop. Declare `ReactElement` props as `[PropertyName]View`. Follow
 - `App.Router.BeforeRouteChange` and `App.Router.AfterRouteChange` are sent with **`broadcast`**, so
   any number of models may subscribe. A guard vetoes only by returning `false`; returning nothing lets
   the navigation through.
+- Route → URL goes through `src/core/infrastructure/routeURL.ts`: `routeToURL` is strict (navigation
+  — a path parameter without a value throws), `resolveRouteURL` is total (hrefs). `NavLink` renders
+  the real URL from `App.Router.ResolveRoute`, so middle-click, Ctrl+click and "copy link" work, while
+  a plain click still navigates in the app. An address on another origin always opens a new tab.
 - API: service clients are ordinary components with `messages:` handlers and no view
   (`src/api/demoServiceApiClient.tsx`). Screens reach them over the bus, never by import.
 - Errors: `UECA.globalSettings.errorHandler` catches everything (set in `appStart.tsx`), so

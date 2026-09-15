@@ -13,6 +13,8 @@ type BasePartialStruct = UECA.ComponentStruct<{
         setRoute: (route: AppRoute) => Promise<boolean>;
         setRouteParams: (params: Record<string, unknown>, patch: boolean) => Promise<void>;
         openNewTab: (route: AppRoute) => Promise<void>;
+        // The URL a route would navigate to, without navigating. Undefined when it cannot resolve.
+        resolveRoute: (route: AppRoute) => Promise<string>;
 
         // Dialogs
         dialogInfo: (title: string, message: string) => Promise<void>;
@@ -57,6 +59,7 @@ function useBase<T extends BasePartialStruct>(extStruct: T, params?: BaseParams<
             setRoute: async (route) => await model.bus.unicast("App.Router.SetRoute", route),
             setRouteParams: async (params, patch) => await model.bus.unicast("App.Router.SetRouteParams", { params, patch }),
             openNewTab: async (route) => await model.bus.unicast("App.Router.OpenNewTab", route),
+            resolveRoute: async (route) => await model.bus.unicast("App.Router.ResolveRoute", route),
 
             // Dialogs
             dialogInfo: async (title, message) => await model.bus.unicast("Dialog.Information", { title, message }),

@@ -37,6 +37,8 @@ function useAppRouter(params?: AppRouterParams): AppRouterModel {
 
             "App.Router.OpenNewTab": async (route) => await model.bus.unicast("App.BrowsingHistory.Open", { path: route, newTab: true }),
 
+            "App.Router.ResolveRoute": async (route) => await model.bus.unicast("App.BrowsingHistory.ResolveRoute", route),
+
             "App.Router.SetRouteParams": async (p) => await _setRouteParams(p.params, p.patch),
 
             "App.BrowsingHistory.OnNavigate": async (path) => await _onNavigateBrowsingHistory(path)

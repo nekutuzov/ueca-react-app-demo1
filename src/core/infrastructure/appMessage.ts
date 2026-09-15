@@ -50,6 +50,7 @@ type MiscMessages = {
     "App.BrowsingHistory.Open": { in: { path: AnyRoute | string, newTab?: boolean } };
     "App.BrowsingHistory.Replace": { in: { path: AnyRoute | string } };
     "App.BrowsingHistory.OnNavigate": { in: string, out: boolean }
+    "App.BrowsingHistory.ResolveRoute": { in: AnyRoute, out: string };
 
     "App.Router.GetRoute": { out: AppRoute };
     "App.Router.GoToRoute": { in: AppRoute; out: boolean };
@@ -58,6 +59,9 @@ type MiscMessages = {
     "App.Router.BeforeRouteChange": { in: AppRoute, out: boolean };
     "App.Router.AfterRouteChange": { in: AppRoute };
     "App.Router.OpenNewTab": { in: AppRoute };
+    // The URL a route would navigate to, without navigating: a link's real href. Undefined when the
+    // route cannot resolve (a path parameter without a value).
+    "App.Router.ResolveRoute": { in: AppRoute, out: string };
 
     "App.Security.IsAuthorized": { out: boolean };
     "App.Security.AuthorizeNative": { in: { user?: string, password?: string } };
