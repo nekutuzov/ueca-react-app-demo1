@@ -25,6 +25,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Agent skills copied from node_modules/ueca-react/skills by the postinstall script.
-# Generated - do not edit in place; re-run "npm install" after upgrading ueca-react.
+# Agent skills belong to the ueca-react package, not to this repository. They are installed by
+# "npx ueca-react-skills" (our postinstall runs it) and replaced wholesale on upgrade, so nothing
+# under here is ever committed - naming the directory rather than each skill also covers any skill
+# a later release adds. Do not edit in place. To track a skill of our own, un-ignore it explicitly:
+#     !.claude/skills/<our-skill>/
 .claude/skills/

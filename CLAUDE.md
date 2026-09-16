@@ -6,9 +6,9 @@ message-bus communication.
 
 ## Start here: the library skills
 
-The library ships its own agent skills, copied into `.claude/skills/` by the `postinstall` script.
-**They are the authority on the framework itself** — this file only covers what is specific to *this*
-application.
+The library ships its own agent skills, installed into `.claude/skills/` by its own command,
+`npx ueca-react-skills`. **They are the authority on the framework itself** — this file only covers
+what is specific to *this* application.
 
 - Invoke **`ueca-app-development`** before creating or changing any component, screen or service. It
   carries the component pattern (struct → hook → `getFC`), state and bindings, lifecycle, model
@@ -21,8 +21,12 @@ Where this file and a skill disagree about the **framework**, the skill wins. Wh
 about **this app's conventions** (base hooks, layout primitives, MUI wrapping, screen patterns), this
 file wins.
 
-`.claude/skills/` is generated — it is gitignored and re-copied on every `npm install`. Never edit it
-in place; after upgrading `ueca-react`, run `npm install` to refresh it.
+**The skills belong to the library, not to this repository, and are never committed.** `.claude/skills/`
+is gitignored as a whole, which also covers any skill a later release adds. They arrive with
+`npx ueca-react-skills`, which **replaces** each directory rather than merging, so a file dropped in a
+later release cannot linger — never edit them in place. After upgrading `ueca-react`, `npm install`
+refreshes them through our own `postinstall` (the library deliberately ships none of its own); run the
+command directly if you skipped install scripts. A fresh clone has no skills until then.
 
 ### Library reference docs
 
@@ -223,7 +227,8 @@ TypeScript runs with `strictNullChecks: false` and `noImplicitAny: false` — ev
 | `npm run dev` | Vite on port **5001**, base path `/ueca-react-app-demo1/` |
 | `npm run build` | `tsc -b && vite build` |
 | `npm run lint` | ESLint |
-| `npm install` | installs deps **and** refreshes `.claude/skills/` via `postinstall` |
+| `npm install` | installs deps **and** refreshes the library skills via our `postinstall` |
+| `npx ueca-react-skills` | refreshes `.claude/skills/` on demand (`--help` for `--dest`, `--auto`) |
 
 The app is served under a base path, and `index.html` sets `<base href="/ueca-react-app-demo1/">`.
 Asset references in `index.html` must be **relative** (`href="ueca.ico"`) so they resolve against it
