@@ -12,8 +12,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy.ps1",
-    "postinstall": "ueca-react-skills --auto"
+    "postinstall": "ueca-react-skills --auto",
+    "predeploy": "npm run build",
+    "deploy": "node scripts/deploy.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

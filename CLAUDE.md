@@ -235,6 +235,20 @@ TypeScript runs with `strictNullChecks: false` and `noImplicitAny: false` — ev
 | `npm run lint` | ESLint |
 | `npm install` | installs deps **and** refreshes the library skills via our `postinstall` |
 | `npx ueca-react-skills` | refreshes `.claude/skills/` on demand (`--help` for `--dest`, `--auto`) |
+| `npm run deploy` | builds, then publishes `dist/` to the `gh-pages` branch |
+
+**Deploying** goes through the `gh-pages` package, driven by `scripts/deploy.mjs`. It clones the
+branch itself, so there is no deploy folder beside the repository to keep in step. Two things that
+script exists for:
+
+- It writes `dist/404.html` as a copy of `index.html`. GitHub Pages has no SPA fallback, so a direct
+  request for `/charts` would otherwise return GitHub's own 404 page and the app would never load.
+  Pages serves `404.html` for unmatched paths, and the app routes from `window.location`, so the copy
+  makes deep links resolve. The URL still reports HTTP 404 by design.
+- It points `CACHE_DIR` at a path under `LOCALAPPDATA`. This drive is exFAT and records no ownership,
+  so git refuses to work in any repository on it unless the path is in `safe.directory`; gh-pages
+  clones into `node_modules/.cache` by default, which lands there. Moving only the cache keeps the
+  machine's global git config untouched.
 
 The app is served under a base path, and `index.html` sets `<base href="/ueca-react-app-demo1/">`.
 Asset references in `index.html` must be **relative** (`href="ueca.ico"`) so they resolve against it
