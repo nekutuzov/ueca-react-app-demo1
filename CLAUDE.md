@@ -1,6 +1,6 @@
 # UECA React Application - AI Coding Agent Instructions
 
-This is a demo application built on **UECA-React 3.0** (`ueca-react` npm package) — a framework that
+This is a demo application built on **UECA-React 3.1** (`ueca-react` npm package) — a framework that
 replaces React patterns with a component model of structured props, children, methods, events and
 message-bus communication.
 
@@ -69,6 +69,12 @@ changelog and in the skill's pitfalls reference; these are the ones this codebas
 - `hashHtmlId` is read from `globalSettings`, not from `window`.
 - **`React.StrictMode` is supported** as of v3. This app still does not enable it (see
   `appStart.tsx`) — it buys a UECA app nothing.
+- **An in-place change to a bound *plain* array no longer reaches the model** (3.1.0). A property
+  holds a plain array as a MobX copy, so a getter handing back the same array now hands over
+  nothing — no assignment, no copy, no events. Mutating an *observable* source still carries, and
+  assigning a new array still replaces. Nothing here relied on the old behaviour: every array
+  binding in this app reads a model prop, which is observable. If you add one over a plain array,
+  either assign a new array or wrap the source in `UECA.observe(...)`.
 
 ## Debugging: use the trace, not guesswork
 
@@ -119,7 +125,7 @@ reaches the dev server as a 404.
 
 ### Technology stack
 
-- **UECA-React 3.0** (`ueca-react`) — the component model, message bus, bindings, tracing
+- **UECA-React 3.1** (`ueca-react`) — the component model, message bus, bindings, tracing
 - **TypeScript** + **JSX**; **React 19** used only for the model-instantiation hook
 - **MobX** — powers reactivity, fully abstracted by UECA; never import it (use `UECA.observe`)
 - **Material-UI v7** — always wrapped, never used directly (see *MUI wrapping* below)
