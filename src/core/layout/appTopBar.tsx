@@ -2,6 +2,7 @@ import * as UECA from "ueca-react";
 import { Typography } from "@mui/material";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AdbIcon from '@mui/icons-material/Adb';
+import ArticleIcon from '@mui/icons-material/Article';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -15,6 +16,7 @@ type AppTopBarStruct = UIBaseStruct<{
         youtubeIconButton: IconButtonModel;
         githubIconButton: IconButtonModel;
         npmIconButton: IconButtonModel;
+        devToIconButton: IconButtonModel;
         userIconButton: IconButtonModel;
     }
 }>;
@@ -66,6 +68,12 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
                 color: "inherit",
                 onClick: async () => await model.openNewTab({path: "https://www.npmjs.com/package/ueca-react"})
             }),
+            devToIconButton: useIconButton({
+                iconView: <ArticleIcon />,
+                title: "Author's page on DEV",
+                color: "inherit",
+                onClick: async () => await model.openNewTab({path: "https://dev.to/nekutuzov"})
+            }),
             userIconButton: useIconButton({
                 iconView: <AccountCircle />,
                 // The account icon signs out at once; the title says so before the click does.
@@ -102,6 +110,7 @@ function useAppTopBar(params?: AppBarParams): AppTopBarModel {
                     <model.youtubeIconButton.View />
                     <model.githubIconButton.View />
                     <model.npmIconButton.View />
+                    <model.devToIconButton.View />
                     <model.userIconButton.View />
                 </Row>
             </Row>

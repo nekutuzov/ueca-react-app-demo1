@@ -22,6 +22,7 @@ const otherRoutes = {
     "https://youtu.be/SQl8f-qGxwU?si=-YTWPpPB7ExBZ6L0": () => null,
     "https://github.com/nekutuzov/ueca-react-app-demo1": () => null,
     "https://www.npmjs.com/package/ueca-react": () => null,
+    "https://dev.to/nekutuzov": () => null,
     "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/home/homeScreen.tsx": () => null,
     "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/demo/dashboard/dashboardScreen.tsx": () => null,
     "https://github.com/nekutuzov/ueca-react-app-demo1/blob/master/src/screens/demo/user/userListScreen.tsx": () => null,
