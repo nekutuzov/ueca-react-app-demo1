@@ -24,9 +24,11 @@ file wins.
 **The skills belong to the library, not to this repository, and are never committed.** `.claude/skills/`
 is gitignored as a whole, which also covers any skill a later release adds. They arrive with
 `npx ueca-react-skills`, which **replaces** each directory rather than merging, so a file dropped in a
-later release cannot linger — never edit them in place. After upgrading `ueca-react`, `npm install`
-refreshes them through our own `postinstall` (the library deliberately ships none of its own); run the
-command directly if you skipped install scripts. A fresh clone has no skills until then.
+later release cannot linger — never edit them in place. After upgrading `ueca-react`, a plain
+`npm install` refreshes them through our own `postinstall` (the library deliberately ships none of its
+own). `npm install ueca-react@<version>` does **not** run it — npm skips the root package's lifecycle
+scripts when given a package name — so follow the upgrade with a plain `npm install`, or run the command
+directly. A fresh clone has no skills until then.
 
 ### Library reference docs
 
