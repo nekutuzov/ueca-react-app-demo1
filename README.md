@@ -1,7 +1,7 @@
 # UECA React App
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
-[![UECA-React](https://img.shields.io/badge/UECA--React-2.0-FF6B35)](https://www.npmjs.com/package/ueca-react)
+[![UECA-React](https://img.shields.io/badge/UECA--React-3.2-FF6B35)](https://www.npmjs.com/package/ueca-react)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.0-646CFF?logo=vite)](https://vitejs.dev/)

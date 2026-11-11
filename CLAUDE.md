@@ -1,6 +1,6 @@
 # UECA React Application - AI Coding Agent Instructions
 
-This is a demo application built on **UECA-React 3.1** (`ueca-react` npm package) — a framework that
+This is a demo application built on **UECA-React 3.2** (`ueca-react` npm package) — a framework that
 replaces React patterns with a component model of structured props, children, methods, events and
 message-bus communication.
 
@@ -125,7 +125,7 @@ reaches the dev server as a 404.
 
 ### Technology stack
 
-- **UECA-React 3.1** (`ueca-react`) — the component model, message bus, bindings, tracing
+- **UECA-React 3.2** (`ueca-react`) — the component model, message bus, bindings, tracing
 - **TypeScript** + **JSX**; **React 19** used only for the model-instantiation hook
 - **MobX** — powers reactivity, fully abstracted by UECA; never import it (use `UECA.observe`)
 - **Material-UI v7** — always wrapped, never used directly (see *MUI wrapping* below)
